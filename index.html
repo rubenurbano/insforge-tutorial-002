@@ -1,0 +1,2225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>InsForge — Guía Completa de Principiante a Profesional | Tutorial Interactivo</title>
+<style>
+:root{
+  --bg:#0a0e1a; --card:#0f172a; --border:#1e3a5f; --accent:#00d4ff;
+  --green:#22c55e; --amber:#f59e0b; --red:#ef4444; --purple:#a855f7;
+  --text:#e2e8f0; --muted:#94a3b8; --radius:10px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,-apple-system,sans-serif;line-height:1.65;overflow-x:hidden}
+::selection{background:rgba(0,212,255,.3)}
+
+/* ===== barra de progreso ===== */
+#progressBar{position:fixed;top:0;left:0;height:4px;width:0%;z-index:1000;
+  background:linear-gradient(90deg,var(--accent),var(--purple));box-shadow:0 0 12px var(--accent);transition:width .1s linear}
+
+/* ===== navbar ===== */
+#topbar{position:fixed;top:4px;left:0;right:0;z-index:900;background:rgba(10,14,26,.92);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--border)}
+.topbar-inner{max-width:1280px;margin:0 auto;display:flex;align-items:center;gap:14px;padding:8px 14px}
+.brand{display:flex;align-items:center;gap:9px;white-space:nowrap;cursor:pointer;user-select:none}
+.brand-logo{width:34px;height:34px;border-radius:8px;background:linear-gradient(135deg,#0b2540,#0f172a);
+  border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;color:var(--accent);
+  font-weight:800;font-size:17px;box-shadow:0 0 12px rgba(0,212,255,.35)}
+.brand-name{font-weight:800;letter-spacing:.5px;font-size:15px}
+.brand-name small{display:block;font-weight:600;font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase}
+#navScroll{display:flex;gap:8px;overflow-x:auto;scrollbar-width:thin;padding:4px 2px;flex:1}
+#navScroll::-webkit-scrollbar{height:5px}
+#navScroll::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+.navbtn{flex:0 0 auto;background:transparent;border:1px solid var(--border);color:var(--muted);
+  padding:7px 13px;border-radius:8px;cursor:pointer;font-size:12.5px;font-weight:600;letter-spacing:.4px;
+  transition:all .22s;font-family:inherit;white-space:nowrap}
+.navbtn:hover{color:var(--text);border-color:var(--accent);transform:translateY(-1px)}
+.navbtn.active{color:#031018;background:var(--accent);border-color:var(--accent);box-shadow:0 0 14px rgba(0,212,255,.5)}
+.navbtn.credits-btn{border-color:var(--purple);color:var(--purple)}
+.navbtn.credits-btn.active{background:var(--purple);color:#fff;border-color:var(--purple);box-shadow:0 0 14px rgba(168,85,247,.5)}
+
+/* ===== layout ===== */
+main{max-width:1280px;margin:0 auto;padding:86px 18px 60px}
+.page{display:none}
+.page.active{display:block;animation:fadeIn .45s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+/* ===== HOME ===== */
+.hero-svg{width:100%;border-radius:14px;overflow:hidden;border:1px solid var(--border);
+  box-shadow:0 20px 60px rgba(0,0,0,.55),0 0 40px rgba(0,212,255,.08);margin-bottom:26px}
+.hero-svg svg{display:block;width:100%;height:auto}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,212,255,.08);border:1px solid var(--accent);
+  color:var(--accent);font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  padding:7px 16px;border-radius:999px;margin-bottom:18px}
+.badge .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+h1.hero-title{font-size:clamp(30px,5.4vw,58px);font-weight:900;letter-spacing:-1px;line-height:1.08;
+  background:linear-gradient(90deg,#fff,var(--accent) 60%,var(--purple));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:12px}
+.hero-sub{color:var(--accent);font-size:clamp(15px,2.2vw,20px);font-weight:700;margin-bottom:16px;letter-spacing:.3px}
+.hero-desc{color:var(--muted);font-size:clamp(14px,1.6vw,17px);max-width:900px;margin-bottom:26px}
+.quote{border-left:4px solid var(--accent);background:linear-gradient(90deg,rgba(0,212,255,.09),transparent);
+  padding:18px 22px;border-radius:0 var(--radius) var(--radius) 0;font-size:clamp(15px,1.9vw,19px);font-style:italic;
+  font-weight:600;margin:0 0 28px;color:#dbeafe}
+.quote small{display:block;margin-top:8px;font-style:normal;color:var(--muted);font-size:12px;letter-spacing:1px}
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:26px}
+.metric{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative;overflow:hidden}
+.metric::before{content:'';position:absolute;top:0;left:0;width:100%;height:3px;background:var(--mc,var(--accent))}
+.metric b{display:block;font-size:26px;color:var(--mc,var(--accent));font-weight:900}
+.metric span{color:var(--muted);font-size:12.5px;letter-spacing:.4px}
+.datetime-row{display:flex;flex-wrap:wrap;gap:12px}
+.dt-chip{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 18px;font-size:14px}
+.dt-chip b{color:var(--accent)}
+
+/* ===== secciones ===== */
+.sec-header{display:flex;align-items:center;gap:16px;margin-bottom:8px;flex-wrap:wrap}
+.sec-icon{width:52px;height:52px;min-width:52px;border-radius:12px;background:linear-gradient(135deg,rgba(0,212,255,.16),rgba(168,85,247,.12));
+  border:1px solid var(--accent);display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 0 18px rgba(0,212,255,.18)}
+.sec-header h2{font-size:clamp(22px,3.4vw,34px);font-weight:900;letter-spacing:-.5px}
+.sec-header .sec-num{font-size:12px;color:var(--accent);letter-spacing:3px;font-weight:700;text-transform:uppercase}
+.sec-lead{color:var(--muted);max-width:950px;margin-bottom:26px;font-size:15px}
+h3{font-size:clamp(17px,2.2vw,22px);margin:30px 0 14px;color:#fff;font-weight:800;display:flex;align-items:center;gap:10px}
+h3::before{content:'▸';color:var(--accent)}
+h4{font-size:15.5px;margin:20px 0 10px;color:var(--accent);font-weight:700}
+p{margin-bottom:12px;font-size:14.5px;color:#cbd5e1}
+ul,ol{margin:0 0 14px 22px}
+li{margin-bottom:7px;font-size:14.5px;color:#cbd5e1}
+li::marker{color:var(--accent)}
+strong{color:#fff}
+a{color:var(--accent)}
+
+/* tarjetas */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;margin-bottom:16px;transition:border-color .25s,transform .25s}
+.card:hover{border-color:#2d5a8f}
+.card h4{margin-top:0}
+.grid{display:grid;gap:14px;margin-bottom:18px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.pcard{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden}
+.pcard::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--pc,var(--accent))}
+.pcard b{display:block;color:var(--pc,var(--accent));font-size:14.5px;margin-bottom:5px}
+.pcard p{font-size:13px;color:var(--muted);margin:0}
+
+/* chips / badges */
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0 18px}
+.chip{background:rgba(0,212,255,.08);border:1px solid var(--border);color:#bae6fd;border-radius:999px;
+  padding:5px 13px;font-size:12.5px;font-weight:600}
+.chip.g{border-color:rgba(34,197,94,.5);color:#86efac;background:rgba(34,197,94,.07)}
+.chip.a{border-color:rgba(245,158,11,.5);color:#fcd34d;background:rgba(245,158,11,.07)}
+.chip.p{border-color:rgba(168,85,247,.5);color:#d8b4fe;background:rgba(168,85,247,.07)}
+.chip.r{border-color:rgba(239,68,68,.5);color:#fca5a5;background:rgba(239,68,68,.07)}
+
+/* callouts */
+.callout{border-radius:var(--radius);padding:16px 18px;margin:16px 0;border:1px solid;border-left-width:5px;font-size:14px}
+.callout .ct{font-weight:800;letter-spacing:1.5px;font-size:11.5px;text-transform:uppercase;display:flex;align-items:center;gap:8px;margin-bottom:7px}
+.callout p{margin:0 0 8px;font-size:13.8px}
+.callout p:last-child{margin-bottom:0}
+.co-info{background:rgba(0,212,255,.06);border-color:rgba(0,212,255,.4)}.co-info .ct{color:var(--accent)}
+.co-ex{background:rgba(34,197,94,.06);border-color:rgba(34,197,94,.4)}.co-ex .ct{color:var(--green)}
+.co-warn{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.45)}.co-warn .ct{color:var(--amber)}
+.co-err{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.45)}.co-err .ct{color:var(--red)}
+
+/* código */
+pre.code{background:#060a14;border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;
+  overflow-x:auto;font-family:Consolas,'Courier New',monospace;font-size:13px;line-height:1.6;color:#a5f3fc;margin:12px 0 18px;white-space:pre}
+pre.code .cm{color:#64748b}
+.code-label{display:inline-block;background:rgba(168,85,247,.12);border:1px solid rgba(168,85,247,.4);color:#d8b4fe;
+  font-size:11px;font-weight:700;letter-spacing:1.5px;padding:4px 12px;border-radius:6px 6px 0 0;margin-bottom:-13px;text-transform:uppercase}
+code.inline{background:#060a14;border:1px solid var(--border);border-radius:5px;padding:2px 7px;
+  font-family:Consolas,monospace;font-size:12.8px;color:#7dd3fc;white-space:nowrap}
+
+/* tablas */
+.tblwrap{overflow-x:auto;margin:14px 0 20px;border:1px solid var(--border);border-radius:var(--radius)}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:520px}
+th{background:#0b1428;color:var(--accent);text-align:left;padding:11px 14px;border-bottom:2px solid var(--border);font-size:12.5px;letter-spacing:.6px;text-transform:uppercase}
+td{padding:11px 14px;border-bottom:1px solid #16283f;color:#cbd5e1;vertical-align:top}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:rgba(0,212,255,.03)}
+td code, td .inline{white-space:normal}
+
+/* pasos */
+ol.steps{list-style:none;counter-reset:st;margin:0 0 18px}
+ol.steps li{counter-increment:st;position:relative;padding:0 0 20px 56px}
+ol.steps li::before{content:counter(st);position:absolute;left:0;top:0;width:38px;height:38px;border-radius:50%;
+  background:linear-gradient(135deg,#0891b2,#0e7490);color:#fff;font-weight:900;display:flex;align-items:center;
+  justify-content:center;border:2px solid var(--accent);box-shadow:0 0 12px rgba(0,212,255,.4)}
+ol.steps li::after{content:'';position:absolute;left:18px;top:40px;bottom:2px;width:2px;background:var(--border)}
+ol.steps li:last-child::after{display:none}
+ol.steps b.t{display:block;color:#fff;font-size:15px;margin-bottom:5px}
+
+/* acordeones */
+details.acc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);margin-bottom:10px;overflow:hidden}
+details.acc summary{cursor:pointer;padding:15px 18px;font-weight:700;font-size:14.5px;color:#e0f2fe;list-style:none;display:flex;align-items:center;gap:10px;transition:background .2s}
+details.acc summary::-webkit-details-marker{display:none}
+details.acc summary::before{content:'＋';color:var(--accent);font-weight:900;font-size:16px;min-width:18px}
+details.acc[open] summary::before{content:'－'}
+details.acc summary:hover{background:rgba(0,212,255,.05)}
+details.acc .acc-body{padding:4px 18px 16px;border-top:1px solid var(--border)}
+
+/* niveles */
+.level{border-left:4px solid var(--lc,var(--accent));background:var(--card);border-radius:0 var(--radius) var(--radius) 0;
+  border-top:1px solid var(--border);border-right:1px solid var(--border);border-bottom:1px solid var(--border);padding:18px;margin-bottom:14px}
+.level b.lv{color:var(--lc,var(--accent));font-size:15px;letter-spacing:.6px;display:block;margin-bottom:6px}
+
+/* volver arriba */
+#toTop{position:fixed;bottom:22px;right:22px;width:48px;height:48px;border-radius:12px;border:1px solid var(--accent);
+  background:rgba(15,23,42,.92);color:var(--accent);font-size:20px;cursor:pointer;z-index:950;opacity:0;
+  pointer-events:none;transition:all .3s;box-shadow:0 0 16px rgba(0,212,255,.3)}
+#toTop.show{opacity:1;pointer-events:auto}
+#toTop:hover{background:var(--accent);color:#031018;transform:translateY(-3px)}
+
+/* footer */
+footer{border-top:1px solid var(--border);background:#080c16;margin-top:40px;padding:34px 18px;text-align:center}
+footer p{font-size:13.5px;color:var(--muted);margin-bottom:6px}
+footer .fi{color:var(--accent);font-style:italic;font-weight:600;margin-top:10px}
+
+/* créditos */
+.credit-card{background:linear-gradient(160deg,#0f172a,#0b1226);border:1px solid var(--purple);border-radius:14px;
+  padding:34px;text-align:center;box-shadow:0 0 40px rgba(168,85,247,.14);margin-top:24px}
+.credit-card h3{justify-content:center;color:var(--purple)}
+.credit-card h3::before{display:none}
+.credit-name{font-size:clamp(24px,4vw,36px);font-weight:900;color:#fff;margin:8px 0 16px}
+.credit-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin:18px 0}
+.credit-grid .dt-chip{font-size:14px}
+
+.kv{display:grid;grid-template-columns:auto 1fr;gap:6px 16px;font-size:14px;margin:10px 0}
+.kv b{color:var(--accent)}
+
+@media (max-width:640px){
+  main{padding:80px 12px 40px}
+  .topbar-inner{padding:6px 8px;gap:8px}
+  .brand-name{display:none}
+  .brand-logo{width:30px;height:30px}
+  ol.steps li{padding-left:48px}
+  pre.code{font-size:12px;padding:12px}
+  .credit-card{padding:22px 14px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001s!important;transition-duration:.001s!important}
+  html{scroll-behavior:auto}
+}
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<header id="topbar">
+  <div class="topbar-inner">
+    <div class="brand" onclick="showSection('home')">
+      <div class="brand-logo">⚒</div>
+      <div class="brand-name">INSFORGE<small>Guía completa</small></div>
+    </div>
+    <nav id="navScroll" aria-label="Navegación del tutorial"></nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ==================== HOME ==================== -->
+<section id="sec-home" class="page active">
+  <div class="hero-svg" id="homeCover"></div>
+  <span class="badge"><span class="dot"></span> Tutorial técnico interactivo · Backend · Agentes de IA</span>
+  <h1 class="hero-title">InsForge</h1>
+  <p class="hero-sub">Guía completa: de principiante absoluto a nivel profesional</p>
+  <p class="hero-desc">Guía completa de InsForge, escrita en castellano sencillo, pensada para llevar a cualquier persona desde cero hasta un nivel profesional. Fuente: documentación oficial de InsForge (<code class="inline">docs.insforge.dev</code>), el blog oficial (<code class="inline">insforge.dev/blog</code>) y el repositorio oficial en GitHub (<code class="inline">github.com/InsForge/InsForge</code>), consultados e investigados específicamente para este tutorial.</p>
+
+  <div class="quote">
+    «Si no puedes explicarlo de forma sencilla, es que no lo entiendes lo suficientemente bien.»
+    <small>— CITA DESTACADA DEL TUTORIAL</small>
+  </div>
+
+  <div class="metrics">
+    <div class="metric" style="--mc:var(--accent)"><b>≈ 3 s</b><span>para crear un backend completo en InsForge Cloud</span></div>
+    <div class="metric" style="--mc:var(--green)"><b>11+</b><span>productos integrados: Database, Auth, Storage, Realtime, Functions, IA…</span></div>
+    <div class="metric" style="--mc:var(--purple)"><b>3</b><span>vías de conexión para agentes: CLI + MCP + Skills</span></div>
+    <div class="metric" style="--mc:var(--amber)"><b>Apache-2.0</b><span>código abierto · Cloud gestionado o Self-Hosted con Docker</span></div>
+    <div class="metric" style="--mc:var(--red)"><b>32</b><span>capítulos: desde los conceptos básicos hasta la chuleta rápida final</span></div>
+    <div class="metric" style="--mc:var(--accent)"><b>5</b><span>niveles de aprendizaje: del Nivel 0 al Nivel 4 profesional</span></div>
+  </div>
+
+  <div class="datetime-row">
+    <div class="dt-chip">📅 Fecha: <b>04/09/2026</b></div>
+    <div class="dt-chip">🕐 Hora: <b>00:53:22</b></div>
+  </div>
+</section>
+
+<!-- ==================== QUÉ ES ==================== -->
+<section id="sec-quees" class="page">
+  <div class="sec-header"><div class="sec-icon">📦</div><div><span class="sec-num">Capítulos 1 · 2 · 3</span><h2>Introducción: ¿Qué es InsForge y qué problema resuelve?</h2></div></div>
+  <p class="sec-lead">Imagina que quieres construir una aplicación: una red social, una tienda online, un cuaderno de notas compartido, lo que sea.</p>
+
+  <h3>1. Introducción a InsForge</h3>
+  <div class="card">
+    <p>Para que esa aplicación funcione de verdad necesitas, además de la pantalla bonita que ve el usuario (el <strong>frontend</strong>), una serie de piezas que casi nunca se ven pero que son imprescindibles: un sitio donde guardar los datos, un sistema para que la gente inicie sesión, un lugar donde guardar las fotos que suben los usuarios, algo que envíe correos, algo que ejecute código cuando pasa algo... A todo ese conjunto de piezas se le llama, en conjunto, el <strong>backend</strong>.</p>
+    <p>Montar un backend desde cero, a mano, es un trabajo largo y técnico. Durante años han existido plataformas que ya traen ese backend «precocinado» para que un desarrollador no tenga que reinventarlo cada vez (<strong>Firebase</strong> y <strong>Supabase</strong> son los ejemplos más conocidos). <strong>InsForge</strong> es una de esas plataformas, con una particularidad muy importante que la distingue de las demás: está pensada, desde el primer día, para que quien la maneje directamente no sea una persona haciendo clic en una pantalla, sino un <strong>agente de inteligencia artificial</strong> (un «coding agent») que escribe y ejecuta comandos.</p>
+    <p>Este tutorial te va a llevar, paso a paso y sin dar nada por sabido, desde no saber nada de InsForge hasta poder usarlo de forma profesional: crear proyectos, diseñar bases de datos, gestionar usuarios, guardar archivos, escribir funciones, conectar modelos de IA, publicar tu aplicación en internet y trabajar codo a codo con un agente de IA para que haga la mayor parte del trabajo técnico por ti.</p>
+    <div class="callout co-info"><div class="ct">ℹ️ Info</div><p>No hace falta que sepas programar para seguir la primera mitad de esta guía. Cada palabra técnica se explica la primera vez que aparece.</p></div>
+  </div>
+
+  <h3>2. ¿Qué es InsForge?</h3>
+  <div class="card">
+    <p>InsForge se define a sí mismo, en su propia documentación oficial, como una <strong>plataforma de backend de código abierto (open source) para la programación asistida por agentes de IA</strong>. La propia documentación lo resume así: InsForge junta en un solo paquete una base de datos Postgres, autenticación de usuarios, almacenamiento de archivos, comunicación en tiempo real, funciones en la nube y una puerta de entrada a modelos de inteligencia artificial, todo ello accesible desde una única interfaz de línea de comandos (CLI) y desde un servidor MCP (ya explicaremos qué es esto).</p>
+    <p>Dicho de otra forma sencilla: InsForge es una <strong>caja de herramientas</strong> para construir el «detrás de escena» de cualquier aplicación, y esa caja de herramientas está diseñada para que la manipule un agente de IA en tu nombre, en lugar de que tengas que aprender tú a usar cada pieza por separado.</p>
+  </div>
+
+  <h4>Los productos que incluye InsForge</h4>
+  <p>Según la documentación oficial, cada proyecto de InsForge incluye estos productos, todos accesibles con la misma identidad de usuario, la misma seguridad y las mismas herramientas:</p>
+  <div class="grid g3">
+    <div class="pcard" style="--pc:var(--accent)"><b>Database</b><p>Base de datos Postgres.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Authentication</b><p>Autenticación de usuarios.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Storage</b><p>Almacenamiento de archivos.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Realtime</b><p>Tiempo real / websockets.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Edge Functions</b><p>Funciones en la nube.</p></div>
+    <div class="pcard" style="--pc:var(--red)"><b>Model Gateway</b><p>Puerta de entrada a modelos de IA.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Sites</b><p>Publicación del frontend.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Messaging</b><p>Envío de correos, con SMS y push en camino.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Payments</b><p>Cobros con Stripe o Razorpay.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Compute</b><p>Contenedores de larga duración.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Analytics</b><p>Analítica de producto con PostHog.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Herramientas agent-native</b><p>Para que los agentes de IA operen el backend por sí mismos (sección «Agent-Native Development»).</p></div>
+  </div>
+
+  <h4>Código abierto y dos formas de usarlo</h4>
+  <div class="card">
+    <p>InsForge es un proyecto de código abierto, publicado bajo la licencia <strong>Apache-2.0</strong>, en el repositorio <code class="inline">github.com/InsForge/InsForge</code>. Esto significa dos cosas prácticas:</p>
+    <ul>
+      <li><strong>InsForge Cloud</strong>: la versión gestionada por la empresa InsForge en <code class="inline">insforge.dev</code>, donde te creas una cuenta y en unos tres segundos tienes un backend funcionando, sin instalar nada.</li>
+      <li><strong>InsForge Self-Hosted (autoalojado)</strong>: instalando tú mismo el software en tu propio servidor con Docker, y así controlas por completo dónde viven tus datos.</li>
+    </ul>
+    <p>Más adelante dedicamos una sección entera a la diferencia entre ambas modalidades.</p>
+  </div>
+
+  <h3>3. ¿Qué problema resuelve?</h3>
+  <p>Para entender el problema que resuelve InsForge conviene compararlo con las dos alternativas más conocidas, tal y como hace la propia documentación oficial en su página de comparativas (<code class="inline">docs.insforge.dev/alternatives</code>).</p>
+
+  <h4>InsForge frente a Supabase</h4>
+  <p>Supabase es también una plataforma de backend de código abierto basada en Postgres, y de hecho InsForge comparte esa misma base (Postgres). La diferencia principal, según la documentación oficial, está en <strong>quién opera la plataforma día a día</strong>:</p>
+  <div class="tblwrap"><table>
+    <tr><th>Aspecto</th><th>Supabase</th><th>InsForge</th></tr>
+    <tr><td>Quién la opera principalmente</td><td>Desarrolladores humanos</td><td>Agentes de IA para programar</td></tr>
+    <tr><td>Modelo de configuración</td><td>Interfaz visual, SQL, CLI explícitos</td><td>Operaciones ejecutadas por el agente</td></tr>
+    <tr><td>Contexto del sistema</td><td>Implícito, lo mantiene el desarrollador</td><td>Estructurado y legible por máquinas (vía MCP)</td></tr>
+    <tr><td>Pagos</td><td>Hay que integrarlos en el código de la app</td><td>Integración con Stripe incluida</td></tr>
+    <tr><td>Acceso a modelos de IA</td><td>Hay que conectarlo tú por fuera</td><td>Puerta de enlace a modelos incluida (Model Gateway)</td></tr>
+  </table></div>
+
+  <h4>InsForge frente a Firebase</h4>
+  <p>Firebase, de Google, está pensado para prototipar rápido con una base de datos de tipo documental (NoSQL), también con un operador humano en el centro. InsForge, en cambio, apunta a la programación con agentes sobre una base de datos relacional (Postgres):</p>
+  <div class="tblwrap"><table>
+    <tr><th>Aspecto</th><th>Firebase</th><th>InsForge</th></tr>
+    <tr><td>Base de datos</td><td>NoSQL orientada a documentos</td><td>Postgres relacional</td></tr>
+    <tr><td>Modelo de datos</td><td>JSON sin esquema fijo</td><td>Tablas estructuradas con relaciones</td></tr>
+    <tr><td>Uniones (joins) entre datos</td><td>No hay soporte nativo</td><td>Uniones y consultas nativas</td></tr>
+    <tr><td>Transacciones</td><td>Con limitaciones</td><td>Transacciones ACID completas</td></tr>
+    <tr><td>Autoalojamiento</td><td>No es posible</td><td>Sí, con Docker</td></tr>
+  </table></div>
+
+  <h4>El problema de fondo</h4>
+  <div class="callout co-info"><div class="ct">ℹ️ Idea central</div>
+  <p>En una frase: la mayoría de los backends existentes asumen que quien los maneja es un <strong>ser humano frente a un panel de control</strong>. InsForge parte de la premisa contraria: quien va a leer la documentación, escribir el esquema de la base de datos, desplegar funciones y depurar errores va a ser, la mayor parte del tiempo, un <strong>agente de inteligencia artificial trabajando desde una terminal</strong>. Todo en InsForge —desde los cambios de esquema (que se guardan como archivos de texto) hasta el diagnóstico de errores— está diseñado para que un agente lo pueda leer, ejecutar y razonar sobre ello sin necesidad de «ver» una pantalla.</p></div>
+</section>
+
+<!-- ==================== AGENTES ==================== -->
+<section id="sec-agentes" class="page">
+  <div class="sec-header"><div class="sec-icon">🤖</div><div><span class="sec-num">Capítulo 4</span><h2>InsForge y los agentes de IA</h2></div></div>
+  <p class="sec-lead">Esta es, según la propia documentación, la razón de ser de InsForge, así que merece una sección dedicada antes de entrar en el resto de funciones.</p>
+
+  <h3>¿Qué significa «agent-native» («nativo para agentes»)?</h3>
+  <div class="card">
+    <p>Un <strong>agente de IA para programar</strong> (lo que en inglés se llama un <em>coding agent</em>) es un asistente de inteligencia artificial integrado en un editor de código o en una terminal —como <strong>Claude Code, Cursor, Windsurf, GitHub Copilot o Codex</strong>— capaz de leer y escribir archivos, ejecutar comandos y tomar decisiones encadenadas para completar una tarea de programación, sin que un humano tenga que teclear cada paso.</p>
+    <p><strong>«Agent-native»</strong> (nativo para agentes) significa que InsForge no ha «añadido» soporte para agentes de IA como quien pone un parche encima de un producto pensado para humanos: todo el diseño de InsForge parte de esa idea. La propia documentación lo explica así: la mayoría de los backends asumen que hay una persona frente a un panel de control; InsForge asume que hay un agente de código frente a una terminal.</p>
+  </div>
+  <p>Esto se traduce en <strong>decisiones concretas</strong>:</p>
+  <ul>
+    <li>Los cambios en la base de datos (<strong>migraciones</strong>) son archivos de texto que un agente puede leer, editar y guardar en el control de versiones (Git), en lugar de clics en formularios.</li>
+    <li>La configuración del proyecto vive en un archivo de texto llamado <code class="inline">insforge.toml</code>, que el agente puede planificar, aplicar y revisar como si fuera código de infraestructura.</li>
+    <li>Cuando algo falla, el agente puede pedirle al propio backend un informe de diagnóstico (<code class="inline">insforge diagnose</code>) y aplicar la solución él mismo, sin depender de que un humano abra un panel de control.</li>
+    <li>Existe una <strong>rama de backend (branching)</strong> que el agente puede crear para probar cambios arriesgados y descartar si algo sale mal.</li>
+  </ul>
+
+  <h3>¿Qué puede hacer un agente con InsForge?</h3>
+  <div class="grid g2">
+    <div class="pcard" style="--pc:var(--accent)"><b>Leer el estado del backend</b><p>Esquemas de tablas, configuración, registros de errores.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Base de datos</b><p>Crear y modificar tablas mediante migraciones.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Autenticación</b><p>Configurar proveedores de inicio de sesión y políticas de contraseñas.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Storage</b><p>Crear cubos (buckets) y subir o descargar archivos.</p></div>
+    <div class="pcard" style="--pc:var(--red)"><b>Funciones</b><p>Escribir y desplegar Edge Functions.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Diagnóstico y despliegue</b><p>Leer logs y diagnósticos, aplicar remediaciones de seguridad y desplegar el frontend.</p></div>
+  </div>
+
+  <h3>CLI, MCP y Skills: tres piezas que se relacionan entre sí</h3>
+  <p>InsForge ofrece tres formas de que un agente de IA «hable» con tu backend. Conviene diferenciarlas bien desde el principio porque el resto de la guía las usa constantemente:</p>
+  <div class="grid g3">
+    <div class="card"><h4>🛠 CLI</h4><p>Interfaz de línea de comandos: un programa de terminal, <code class="inline">@insforge/cli</code>, que tanto tú como el agente podéis ejecutar para hacer cualquier operación sobre el proyecto (crear tablas, desplegar, diagnosticar, etc.). Es <strong>«las manos»</strong> del agente.</p></div>
+    <div class="card"><h4>🔌 MCP</h4><p>Model Context Protocol («protocolo de contexto para modelos»): un estándar abierto que permite que un editor de IA (como Claude Code o Cursor) se conecte directamente a las herramientas de InsForge —consultar el esquema, ejecutar SQL, gestionar el almacenamiento, desplegar— sin salir del chat con el agente. Es <strong>«el cable»</strong>.</p></div>
+    <div class="card"><h4>📘 Skills</h4><p>«Habilidades»: instrucciones y buenas prácticas de InsForge que el agente puede instalar en su propio proyecto para saber, de entrada, cómo se trabaja con InsForge (qué convenciones seguir, qué comandos usar). Se instalan típicamente a través de la CLI. Son <strong>«el manual de instrucciones»</strong>.</p></div>
+  </div>
+  <div class="callout co-info"><div class="ct">ℹ️ Info</div><p>Dedicamos una sección completa a cada una de las tres más adelante (secciones 15, 16 y 17), pero es importante que sepas desde ya que <strong>no son excluyentes</strong>: la documentación oficial recomienda empezar por la CLI, que funciona en cualquier terminal, y añadir MCP si tu editor lo soporta. Puedes usar ambas a la vez.</p></div>
+</section>
+
+<!-- ==================== CONCEPTOS ==================== -->
+<section id="sec-conceptos" class="page">
+  <div class="sec-header"><div class="sec-icon">📚</div><div><span class="sec-num">Capítulo 5</span><h2>Conceptos fundamentales</h2></div></div>
+  <p class="sec-lead">Antes de tocar nada, vamos a aclarar, uno por uno y sin prisa, los conceptos técnicos que vas a encontrar constantemente en esta guía. Si ya conoces alguno, puedes saltarlo.</p>
+  <div class="grid g2">
+    <div class="pcard" style="--pc:var(--accent)"><b>Backend</b><p>La parte de una aplicación que no ves directamente en la pantalla: donde se guardan los datos, se gestionan los usuarios y se ejecuta la lógica de negocio. Se opone al frontend, que es la parte visual con la que interactúa el usuario.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Frontend</b><p>La parte visual de una aplicación: lo que el usuario ve y toca en su navegador o en su móvil. Suele estar construido con tecnologías como React, Vue o Next.js.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Terminal</b><p>Una ventana de texto donde escribes comandos (órdenes escritas) para que el ordenador haga algo, en lugar de hacer clic con el ratón en botones. En Windows se abre normalmente como «PowerShell» o «Símbolo del sistema»; en Mac y Linux se llama «Terminal».</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Comando</b><p>Una instrucción de texto que escribes en la terminal y que, al pulsar Enter, el ordenador ejecuta. Por ejemplo, <code class="inline">npx @insforge/cli login</code> es un comando.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Git</b><p>Un sistema para guardar el historial de cambios de un proyecto de código, de forma que puedes ver qué cambió, cuándo y por quién, y volver atrás si algo sale mal. InsForge se apoya mucho en Git porque los cambios de esquema y de configuración se guardan como archivos versionables.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Docker</b><p>Una tecnología que permite empaquetar una aplicación (con todo lo que necesita para funcionar) dentro de una «caja» llamada contenedor, de forma que funcione igual en cualquier ordenador o servidor. InsForge autoalojado se instala usando Docker.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>API</b><p>Application Programming Interface («interfaz de programación de aplicaciones»). Un conjunto de reglas que permite que un programa le pida datos o acciones a otro programa. Cuando tu aplicación «habla» con InsForge para leer o guardar datos, lo hace a través de su API.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>REST / HTTP</b><p>HTTP es el protocolo con el que los navegadores y aplicaciones piden y reciben información por internet. REST es un estilo de diseño de API muy extendido que usa ese mismo protocolo. Cuando la documentación de InsForge habla de «REST API», se refiere a poder hablar con InsForge usando peticiones HTTP normales, desde cualquier lenguaje de programación.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>SDK</b><p>Software Development Kit («kit de desarrollo de software»). Una librería de código ya preparada, en un lenguaje concreto (por ejemplo TypeScript), que te permite usar una plataforma —en este caso InsForge— con funciones ya listas, sin tener que construir tú mismo cada petición HTTP a mano.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Base de datos</b><p>Un lugar organizado donde se guardan datos de forma estructurada para poder consultarlos y modificarlos después. InsForge usa PostgreSQL (a menudo abreviado como «Postgres»), una de las bases de datos relacionales de código abierto más usadas del mundo.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Base de datos relacional / tabla / fila / columna</b><p>Una base de datos relacional organiza la información en tablas, parecidas a una hoja de cálculo: cada tabla tiene columnas (los tipos de dato, como «nombre» o «email») y filas (cada registro concreto, por ejemplo una persona). Las tablas se pueden relacionar entre sí (por ejemplo, cada «pedido» pertenece a un «cliente»).</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Migración</b><p>Un archivo de texto con instrucciones SQL que describe un cambio concreto en la estructura de la base de datos (por ejemplo, «crear la tabla empleados»). Las migraciones se aplican en orden y quedan guardadas en el historial del proyecto, de forma que siempre se sabe cómo ha evolucionado la base de datos.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>RLS (Row Level Security)</b><p>«Seguridad a nivel de fila». Una función de PostgreSQL que permite definir reglas sobre qué filas de una tabla puede leer o modificar cada usuario. Es la pieza clave que hace que, aunque todos los usuarios compartan la misma base de datos, cada uno solo vea sus propios datos (o los que tú decidas permitirle ver).</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Autenticación</b><p>El proceso de comprobar que un usuario es quien dice ser (normalmente con un email y una contraseña, o iniciando sesión con Google, GitHub, etc.).</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Autorización</b><p>El proceso de decidir qué puede hacer un usuario ya identificado (por ejemplo, si puede borrar una publicación que no es suya). En InsForge, la autenticación la gestiona el propio InsForge y la autorización se resuelve, sobre todo, con las políticas de RLS.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>JWT (JSON Web Token)</b><p>Un tipo de «carnet de identidad digital» cifrado que un servidor entrega a un usuario cuando inicia sesión correctamente. Ese carnet se envía en cada petición siguiente para demostrar quién es, sin tener que volver a escribir la contraseña cada vez.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Almacenamiento de objetos / Storage</b><p>Un sistema para guardar archivos binarios (imágenes, vídeos, PDFs) que no encajan bien dentro de una fila de una base de datos. InsForge usa un sistema de almacenamiento compatible con el estándar de Amazon S3.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Función serverless / Edge Function</b><p>Un fragmento de código que se ejecuta bajo demanda (cuando ocurre algo: una petición web, un cronómetro, un cambio en la base de datos) y que se apaga solo cuando termina, sin que tengas que mantener un servidor encendido permanentemente.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Contenedor de larga duración</b><p>A diferencia de una función serverless, es un proceso que se queda encendido de forma continua (por ejemplo, para escuchar una cola de tareas). En InsForge, esta pieza se llama Custom Compute.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Modelo de lenguaje (LLM) / proveedor de IA</b><p>Un modelo de inteligencia artificial (como los de OpenAI, Anthropic o Google) capaz de generar texto, código o respuestas conversacionales. Una aplicación normalmente llama a estos modelos a través de una API externa; InsForge facilita ese acceso a través de su Model Gateway.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>MCP (Model Context Protocol)</b><p>Un estándar abierto que define cómo un agente de IA puede conectarse a «herramientas» externas (como InsForge) para leer datos y ejecutar acciones de forma estructurada, dentro del propio chat con el agente.</p></div>
+    <div class="pcard" style="--pc:var(--red)"><b>CLI (Command Line Interface)</b><p>«Interfaz de línea de comandos». Un programa que se controla escribiendo comandos de texto en una terminal, en lugar de hacer clic en botones.</p></div>
+  </div>
+  <div class="callout co-info"><div class="ct">ℹ️ Info</div><p>Con estos conceptos ya puestos sobre la mesa, empezamos a movernos dentro de InsForge de verdad.</p></div>
+</section>
+
+<!-- ==================== PRIMEROS PASOS ==================== -->
+<section id="sec-primeros" class="page">
+  <div class="sec-header"><div class="sec-icon">🚀</div><div><span class="sec-num">Capítulo 6 · Nivel 0 y Nivel 1</span><h2>Primeros pasos</h2></div></div>
+  <p class="sec-lead">Lo mínimo para tener InsForge funcionando y conectado a tu agente de IA. Tomado directamente de la guía oficial de inicio rápido (Quickstart) y de la guía de configuración de MCP.</p>
+
+  <ol class="steps">
+    <li><b class="t">Crear tu cuenta y tu proyecto en InsForge Cloud</b>
+      <ul>
+        <li>Entra en <code class="inline">insforge.dev</code> y crea una cuenta gratuita.</li>
+        <li>Ya dentro, pulsa <strong>«Create New Project»</strong> («Crear nuevo proyecto»).</li>
+        <li>Espera unos tres segundos: tu backend estará listo casi al instante.</li>
+        <li>Se te redirigirá a la consola de tu proyecto. En la URL del navegador verás algo parecido a esto:<br><code class="inline">https://insforge.dev/dashboard/project/&lt;tu-id-de-proyecto&gt;</code></li>
+        <li>Copia ese <code class="inline">&lt;tu-id-de-proyecto&gt;</code>: lo necesitarás en el paso siguiente.</li>
+      </ul>
+      <div class="callout co-ex"><div class="ct">✅ ¿Qué acaba de ocurrir?</div><p>Se ha creado, en la nube de InsForge, un backend completo y aislado solo para ti: una base de datos Postgres vacía, un sistema de autenticación listo para usar, un espacio de almacenamiento, etc. Todavía no está conectado a ningún código tuyo.</p></div>
+    </li>
+    <li><b class="t">Conectar la CLI a tu proyecto</b>
+      <p>Abre una terminal en la carpeta de tu proyecto (o crea una carpeta nueva vacía si estás empezando) y ejecuta:</p>
+<pre class="code">npx @insforge/cli link --project-id &lt;tu-id-de-proyecto&gt;</pre>
+      <p><strong>¿Qué hace este comando?</strong> <code class="inline">npx</code> es una utilidad de Node.js que descarga y ejecuta un programa (en este caso, la CLI de InsForge) sin necesidad de instalarlo de forma permanente en tu ordenador. Ejecutando la CLI así, en lugar de instalarla globalmente, te aseguras de que siempre usas la versión correcta para tu proyecto. El comando <code class="inline">link</code> deja, en la carpeta actual, un pequeño archivo que indica «este directorio pertenece a este proyecto de InsForge», de forma que el resto de comandos ya saben con qué backend hablar.</p>
+      <div class="callout co-warn"><div class="ct">⚠️ Requisito previo</div><p>Tener <strong>Node.js</strong> instalado en tu ordenador (que es lo que trae <code class="inline">npx</code>). Si nunca lo has instalado, tendrás que descargarlo desde la web oficial de Node.js antes de este paso; la documentación de InsForge consultada no detalla ese proceso porque lo da por hecho.</p></div>
+    </li>
+    <li><b class="t">Verificar que tu agente de IA ve InsForge</b>
+      <p>Envía este mensaje, literalmente, a tu agente de código (Claude Code, Cursor, etc.):</p>
+<pre class="code">I'm using InsForge as my backend platform. Read the current directory,
+make sure InsForge skills are installed, and use InsForge CLI for
+backend tasks.</pre>
+      <p>(En castellano vendría a decir: «Estoy usando InsForge como plataforma de backend. Lee el directorio actual, asegúrate de que las Skills de InsForge están instaladas, y usa la CLI de InsForge para las tareas de backend.»)</p>
+    </li>
+    <li><b class="t">Opcional pero recomendado: conectar también por MCP</b>
+      <p>Si tu editor soporta MCP (Claude Code, Cursor, Windsurf, GitHub Copilot, Codex, entre otros), puedes además conectar el servidor MCP remoto de InsForge con un solo comando:</p>
+<pre class="code">npx add-mcp https://mcp.insforge.dev/mcp</pre>
+      <p>Este comando intenta instalar y autenticar automáticamente el servidor MCP de InsForge para tu editor. Según la documentación, funciona con <strong>Claude Code, Claude Desktop, Codex, Cursor, Gemini CLI, Goose, GitHub Copilot, OpenCode y Zed</strong>, entre otros. Si tu herramienta no está en esa lista, o el proceso automático no termina, cada editor tiene también una configuración manual (un archivo JSON o TOML) explicada en detalle en la página oficial <code class="inline">mcp-setup</code>.</p>
+      <p>Tras instalarlo, puede pedirte iniciar sesión: se abrirá una ventana del navegador para que inicies sesión en tu cuenta de InsForge y autorices el acceso.</p>
+      <p>Para comprobar que la conexión MCP funciona, envía este mensaje a tu agente:</p>
+<pre class="code">I'm using InsForge as my backend platform, call InsForge MCP's
+fetch-docs tool to learn about InsForge instructions.</pre>
+      <p>Si todo ha ido bien, verás el indicador <strong>«MCP Connected»</strong> en la esquina superior derecha del panel de tu proyecto.</p>
+    </li>
+  </ol>
+
+  <div class="callout co-info"><div class="ct">ℹ️ ¿CLI o MCP? ¿Cuál elijo?</div><p>La documentación oficial es clara: <strong>no es una elección excluyente</strong>. Recomienda empezar por la CLI, porque funciona en cualquier terminal sin necesidad de que tu editor soporte nada especial, y añadir MCP si tu editor de IA lo soporta, para que el agente tenga acceso directo a esquemas, registros y contexto del proyecto sin salir del chat. Puedes usar ambas a la vez sin ningún problema.</p></div>
+</section>
+
+<!-- ==================== PROYECTOS ==================== -->
+<section id="sec-proyectos" class="page">
+  <div class="sec-header"><div class="sec-icon">🗂️</div><div><span class="sec-num">Capítulo 7</span><h2>Crear y gestionar un proyecto</h2></div></div>
+  <p class="sec-lead">Un proyecto en InsForge es tu backend: una base de datos, una configuración de autenticación, un almacenamiento, unas funciones, todo agrupado bajo un mismo identificador (el <code class="inline">project-id</code>).</p>
+
+  <h3>Ver y cambiar el proyecto activo de la CLI</h3>
+  <p>La CLI mantiene un «contexto» de con qué proyecto estás trabajando en cada momento. Los comandos relacionados, según el listado oficial de la CLI, son:</p>
+<pre class="code">npx @insforge/cli login     # iniciar sesión en tu cuenta
+npx @insforge/cli logout    # cerrar sesión
+npx @insforge/cli whoami    # ver con qué cuenta has iniciado sesión
+npx @insforge/cli current   # ver el proyecto actualmente enlazado
+npx @insforge/cli list      # listar tus proyectos</pre>
+
+  <h3>Leer el estado completo de tu backend</h3>
+  <p>Un comando que usarás constantemente, sobre todo si trabajas con un agente de IA, es:</p>
+<pre class="code">npx @insforge/cli --json metadata</pre>
+  <p>Esto devuelve, en formato JSON (un formato de datos estructurado, fácil de leer para un programa), el estado actual de tu backend: esquemas de tablas, configuración, etc. Es la forma en que un agente «se pone al día» sobre tu proyecto antes de hacer cualquier cambio.</p>
+
+  <h3>Actualizar la versión del backend</h3>
+<pre class="code">npx @insforge/cli projects update-version</pre>
+  <p>Este comando mueve tu proyecto a la última versión del backend de InsForge. Por defecto actúa sobre el proyecto enlazado; puedes indicar otro con <code class="inline">--project &lt;id&gt;</code>. Como reinicia la instancia, es normal esperar una breve interrupción del servicio; puedes añadir <code class="inline">--wait</code> para que el comando no termine hasta que la actualización haya acabado.</p>
+
+  <h3>Borrar un proyecto</h3>
+<pre class="code">npx @insforge/cli projects delete --project &lt;id&gt;</pre>
+  <div class="callout co-err"><div class="ct">⛔ Atención — esta acción es irreversible</div>
+  <p>El parámetro <code class="inline">--project</code> es obligatorio (nunca usa automáticamente el proyecto enlazado, precisamente para evitar borrar el proyecto equivocado por error) y borra por completo la base de datos, el almacenamiento y cualquier otro recurso del proyecto, incluidas sus ramas de backend. La documentación oficial recomienda <strong>no usar nunca el modificador <code class="inline">--yes</code></strong> en este comando concreto, y pedir a una persona que verifique el identificador exacto del proyecto antes de ejecutarlo.</p></div>
+  <p>Tanto <code class="inline">update-version</code> como <code class="inline">delete</code> también están disponibles desde el panel de control, dentro de <strong>Settings → General</strong> («Ajustes → General»).</p>
+
+  <h3>Compartir un proyecto con tu equipo</h3>
+  <div class="card">
+    <p>Según la documentación (sección de preguntas frecuentes), el acceso en InsForge se comparte <strong>a nivel de organización, no proyecto por proyecto</strong>: invitas a alguien a la organización que es dueña de tus proyectos, y esa persona obtiene acceso a todos los proyectos de dentro. No existe un flujo de «compartir solo este proyecto».</p>
+    <p><strong>Para invitar a alguien:</strong></p>
+    <ol>
+      <li>En el panel, abre la organización correspondiente con el selector de organizaciones, arriba a la izquierda.</li>
+      <li>Pulsa <strong>Members</strong> («Miembros») en el menú lateral.</li>
+      <li>Pulsa <strong>Invite Member</strong> («Invitar miembro»), escribe su email y elige un rol: <strong>Administrator</strong> (control total: gestionar proyectos, invitar y quitar miembros) o <strong>Developer</strong> (acceso normal a los proyectos, sin poder gestionar miembros).</li>
+    </ol>
+    <p>La persona recibe una invitación por correo, <strong>válida 7 días</strong>. Si inicia sesión en InsForge con esa misma dirección de correo y la acepta, entra en la organización con el rol elegido.</p>
+  </div>
+</section>
+
+<!-- ==================== DATABASE ==================== -->
+<section id="sec-database" class="page">
+  <div class="sec-header"><div class="sec-icon">🗄️</div><div><span class="sec-num">Capítulo 8</span><h2>Database / PostgreSQL</h2></div></div>
+  <p class="sec-lead">La base de datos es, probablemente, la pieza más importante de InsForge, así que le dedicamos un espacio amplio.</p>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Cada proyecto de InsForge incluye una base de datos <strong>PostgreSQL completa</strong>. Según la documentación oficial, cada tabla que creas se convierte automáticamente en un <strong>endpoint (un punto de acceso) REST tipado y en un cliente SDK tipado</strong>, sin ningún paso de generación de código intermedio. La misma base de datos Postgres gestiona las consultas relacionales normales, la búsqueda semántica mediante <code class="inline">pgvector</code> (sección Vector Store) y los flujos de cambios en tiempo real.</p>
+    <p>Internamente, InsForge usa <strong>PostgREST</strong>, una herramienta que traduce automáticamente tu base de datos Postgres en una API REST, y aplica seguridad a nivel de fila (RLS) para que cada consulta —venga de la API REST, del SDK, de tiempo real o de almacenamiento— respete quién puede ver o modificar qué.</p>
+  </div>
+
+  <h3>¿Cuándo usarla?</h3>
+  <p>Úsala para cualquier <strong>dato estructurado</strong> de tu aplicación: usuarios, publicaciones, pedidos, comentarios, configuraciones, relaciones entre esos datos. Si necesitas guardar archivos (imágenes, PDFs, vídeos), eso no va en la base de datos, sino en Storage: la base de datos guarda filas, el almacenamiento guarda objetos.</p>
+
+  <h3>Cómo se usa: las migraciones</h3>
+  <p>La forma recomendada de cambiar la estructura de tu base de datos (crear tablas, añadir columnas, etc.) en InsForge es mediante <strong>migraciones</strong>: archivos SQL versionados, guardados en la carpeta <code class="inline">migrations/</code> de tu proyecto, que se aplican con la CLI. Cada migración es un único archivo con un nombre que empieza por una marca de tiempo de 14 dígitos en UTC, con este formato: <code class="inline">&lt;AAAAMMDDHHmmss&gt;_&lt;nombre&gt;.sql</code>.</p>
+
+  <h4>Ejemplo práctico paso a paso</h4>
+  <ol class="steps">
+    <li><b class="t">Conecta tu backend (si no lo has hecho ya)</b>
+<pre class="code">npx @insforge/cli login
+npx @insforge/cli link</pre></li>
+    <li><b class="t">Crea un archivo de migración nuevo</b>
+<pre class="code">npx @insforge/cli db migrations new create-employees-table</pre>
+      <p>Esto genera un archivo SQL vacío con el nombre indicado, listo para que escribas dentro el SQL del cambio.</p></li>
+    <li><b class="t">Escribe el SQL dentro del archivo generado</b>
+<pre class="code">create table if not exists public.employees (
+  id bigint primary key generated always as identity,
+  name text not null,
+  email text,
+  created_at timestamptz default now()
+);</pre></li>
+    <li><b class="t">Aplica las migraciones pendientes</b>
+<pre class="code">npx @insforge/cli db migrations up --all</pre></li>
+    <li><b class="t">Comprueba el historial</b>
+<pre class="code">npx @insforge/cli db migrations list</pre></li>
+  </ol>
+
+  <div class="callout co-ex"><div class="ct">✅ ¿Qué acaba de ocurrir?</div><p>La CLI aplica los archivos pendientes en orden, dentro de una <strong>transacción</strong> (un bloque de cambios que se aplica todo junto o no se aplica nada, para evitar dejar la base de datos a medias), y solo si tiene éxito queda registrado en el historial del proyecto (en una tabla interna llamada <code class="inline">system.custom_migrations</code>). PostgREST recarga automáticamente los metadatos del esquema, así que tu tabla nueva queda disponible en la API al instante.</p></div>
+
+  <h4>Reglas importantes</h4>
+  <ul>
+    <li>El flujo de migraciones es <strong>solo hacia adelante (forward-only)</strong>: una vez aplicada una migración en remoto, nunca se edita ese mismo archivo; si necesitas corregir algo, escribes una migración nueva.</li>
+    <li>Dentro de un archivo de migración <strong>no se pueden usar <code class="inline">BEGIN</code>, <code class="inline">COMMIT</code> ni <code class="inline">ROLLBACK</code></strong>: la CLI ya envuelve todo el archivo en una transacción por ti.</li>
+    <li>Si adoptas migraciones sobre un proyecto que ya existía (creado antes a mano desde el panel), ejecuta primero <code class="inline">db migrations fetch</code> para traer el historial remoto a archivos locales.</li>
+    <li>Algunos comandos de PostgreSQL no pueden ejecutarse dentro de una transacción (por ejemplo <code class="inline">CREATE INDEX CONCURRENTLY</code> o <code class="inline">VACUUM</code>). Para esos casos, la CLI ofrece una vía sin transacción:</li>
+  </ul>
+<pre class="code">npx @insforge/cli db query --unrestricted "CREATE INDEX CONCURRENTLY idx_orders_customer ON public.orders (customer_id)"</pre>
+  <p>Ten en cuenta que tanto <code class="inline">db query</code> como <code class="inline">db query --unrestricted</code> aplican un <strong>límite de 30 segundos por sentencia</strong>, así que una operación muy pesada sobre una tabla grande podría agotar ese tiempo.</p>
+  <div class="callout co-err"><div class="ct">⛔ Error habitual</div><p>Editar a mano, desde el panel visual, una tabla que ya gestionas por migraciones. Esto provoca que el historial en Git y el historial real de la base de datos diverjan (lo que la documentación llama <strong>«drift»</strong>). Una vez que decides usar migraciones para un proyecto, la recomendación oficial es enrutar todos los cambios de esquema a través de archivos.</p></div>
+
+  <h3>Copias de seguridad y restauración</h3>
+  <div class="card">
+    <p>Desde el panel, en <strong>Database → Backup &amp; Restore</strong>, puedes:</p>
+    <ul>
+      <li><strong>Ver las copias de seguridad automáticas</strong>: en InsForge Cloud, cada proyecto de un plan de pago recibe una copia completa diaria, conservada 7 días.</li>
+      <li><strong>Crear copias manuales</strong> antes de un cambio arriesgado (el plan gratuito incluye 1 hueco de copia manual; los planes de pago, 5). Las copias manuales se conservan hasta que tú las borres.</li>
+      <li><strong>Restaurar cualquier copia</strong>, automática o manual. Al restaurar, el proyecto queda offline durante el proceso, se pierden los datos creados después de esa copia, y la acción no se puede deshacer. Si tienes dudas, haz antes una copia manual.</li>
+    </ul>
+    <div class="callout co-warn"><div class="ct">⚠️ Importante</div><p>Las copias de seguridad cubren <strong>solo la base de datos</strong>. Los archivos subidos a Storage no están incluidos.</p></div>
+    <p>En autoalojamiento, la misma pantalla de Backup &amp; Restore existe para copias manuales; además puedes activar <strong>copias programadas</strong> desde Database Settings, eligiendo una frecuencia (desde cada 6 horas hasta semanal, o cualquier expresión cron de 5 campos, evaluada en UTC, con un máximo de una copia por hora) y un periodo de retención.</p>
+  </div>
+
+  <h3>RLS: activar y desactivar la seguridad por fila</h3>
+  <p>Según la documentación oficial (sección de preguntas frecuentes), las tablas nuevas tienen <strong>RLS activado por defecto</strong>. Para cambiarlo en una tabla ya existente:</p>
+<pre class="code">-- desactivar RLS
+ALTER TABLE public.mytable DISABLE ROW LEVEL SECURITY;
+
+-- reactivar RLS
+ALTER TABLE public.mytable ENABLE ROW LEVEL SECURITY;</pre>
+  <div class="callout co-warn"><div class="ct">⚠️ Advertencia oficial</div>
+  <p>Desactivar RLS elimina todo el filtrado por fila; cualquier rol con privilegios sobre la tabla (<code class="inline">authenticated</code>, y <code class="inline">anon</code> si tiene permiso) podrá leer y escribir cualquier fila a través de la API de datos. Es preferible escribir políticas de RLS que desactivarlo. Las peticiones administrativas hechas con la clave de API (<code class="inline">ik_...</code>) siempre se saltan RLS, esté activado o no.</p>
+  <p>Al revés: activar RLS en una tabla que no tiene ninguna política aplica el comportamiento por defecto de PostgreSQL, que es <strong>denegar todo</strong>: <code class="inline">anon</code> y <code class="inline">authenticated</code> pierden todo acceso a esa tabla a través de la API hasta que añadas al menos una política.</p></div>
+
+  <h3>Consultar tablas fuera del esquema <code class="inline">public</code></h3>
+  <div class="card">
+    <p>Por defecto, todas tus tablas viven en el esquema <code class="inline">public</code> (una especie de «carpeta» dentro de la base de datos). Si creaste tú mismo otro esquema con <code class="inline">CREATE SCHEMA</code>, puedes acceder a él desde el panel (con el selector de esquema), desde la API REST (con el parámetro <code class="inline">?schema=</code> o las cabeceras <code class="inline">Accept-Profile</code> / <code class="inline">Content-Profile</code>), desde la CLI (<code class="inline">db query</code> cualificando la tabla con el nombre del esquema) o desde el SDK con <code class="inline">.schema('mi_esquema')</code> antes de <code class="inline">.from(...)</code>.</p>
+    <p>Un detalle importante que señala la documentación: un esquema personalizado es <strong>enrutable pero no legible</strong> hasta que le das permisos explícitos a los roles <code class="inline">anon</code> y <code class="inline">authenticated</code> con <code class="inline">GRANT</code>, y después le añades RLS como a cualquier otra tabla.</p>
+  </div>
+</section>
+
+<!-- ==================== AUTH ==================== -->
+<section id="sec-auth" class="page">
+  <div class="sec-header"><div class="sec-icon">🔐</div><div><span class="sec-num">Capítulo 9</span><h2>Authentication</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>El producto Authentication de InsForge gestiona el registro, el inicio de sesión, las sesiones y la identidad de los usuarios de tu aplicación. Los usuarios pueden entrar con <strong>email y contraseña</strong>, con un <strong>enlace mágico</strong> (un enlace de un solo uso enviado por correo), con un <strong>código de un solo uso</strong>, con <strong>proveedores OAuth</strong> (Google, GitHub, Apple, y otros) o con cualquier proveedor de identidad compatible con <strong>OIDC</strong> que tú conectes. InsForge emite un JWT al iniciar sesión, y ese mismo token lo usan el resto de productos de la plataforma (base de datos, almacenamiento, tiempo real) para saber quién hace cada petición.</p>
+  </div>
+
+  <h3>¿Cómo funciona?</h3>
+  <div class="grid g2">
+    <div class="pcard" style="--pc:var(--accent)"><b>Email y contraseña (método por defecto)</b><p>El usuario se registra, recibe un correo de confirmación y obtiene un JWT de sesión al iniciar sesión. El restablecimiento de contraseña, la verificación de email y la protección contra ataques por fuerza bruta ya vienen incluidos.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Enlace mágico y OTP</b><p>One-Time Password («contraseña de un solo uso»): se envía un enlace o un código de seis dígitos al correo del usuario, sin que tenga que recordar ninguna contraseña.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Proveedores OAuth</b><p>Soporte de primera clase para Google, GitHub, Apple, Microsoft, GitLab, Discord y más, además de proveedores OAuth 2.0/OIDC personalizados (Keycloak, Okta, Auth0, tu propio proveedor de identidad) sin escribir código específico para cada uno.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Modo servidor OAuth</b><p>InsForge también puede actuar como su propio proveedor de identidad OAuth 2.0/OIDC para tus propias aplicaciones satélite (ver la guía oficial de «OAuth Server»).</p></div>
+  </div>
+  <p>Los datos de cada usuario se guardan en tu propia base de datos Postgres, dentro del esquema <code class="inline">auth</code> (la tabla <code class="inline">auth.users</code>), así que puedes relacionarlos con tus propias tablas mediante claves foráneas.</p>
+
+  <h3>Ejemplo práctico: registrar e iniciar sesión con el SDK de TypeScript</h3>
+<pre class="code">import { createClient } from '@insforge/sdk';
+
+const insforge = createClient({
+  baseUrl: 'https://tu-app.insforge.app',
+  anonKey: 'tu-clave-anon',
+});
+
+// Registrar un usuario nuevo
+const { data, error } = await insforge.auth.signUp({
+  email: 'usuario@ejemplo.com',
+  password: 'contraseña_segura123',
+  name: 'Juana Pérez',
+});
+
+// Iniciar sesión
+const { data: sesion } = await insforge.auth.signInWithPassword({
+  email: 'usuario@ejemplo.com',
+  password: 'contraseña_segura123',
+});</pre>
+  <div class="callout co-ex"><div class="ct">✅ ¿Qué acaba de ocurrir?</div><p>El primer bloque crea un cliente de InsForge apuntando a tu proyecto (usando la URL y la clave «anon», que es la clave pública pensada para usarse en el navegador). <code class="inline">signUp</code> registra al usuario; si tu proyecto exige verificación de email, <code class="inline">accessToken</code> vendrá vacío hasta que el usuario confirme su correo, y <code class="inline">requireEmailVerification</code> valdrá <code class="inline">true</code>. <code class="inline">signInWithPassword</code> inicia sesión y devuelve, entre otras cosas, un <code class="inline">accessToken</code> (el JWT de sesión).</p></div>
+
+  <h3>Errores habituales</h3>
+  <div class="callout co-err"><div class="ct">⛔ Error 1</div><p>Olvidar que la clave «anon» está pensada para el navegador (sujeta a RLS) y confundirla con la clave de administrador («API Key», que empieza por <code class="inline">ik_</code> y se salta RLS). <strong>La clave de administrador nunca debe usarse desde el navegador.</strong></p></div>
+  <div class="callout co-err"><div class="ct">⛔ Error 2</div><p>En autoalojamiento, olvidar configurar un proveedor de correo (Custom SMTP) antes de activar la verificación de email: sin un proveedor de correo configurado, los correos de verificación, enlace mágico y restablecimiento de contraseña no se llegan a enviar.</p></div>
+</section>
+
+<!-- ==================== STORAGE ==================== -->
+<section id="sec-storage" class="page">
+  <div class="sec-header"><div class="sec-icon">📁</div><div><span class="sec-num">Capítulo 10</span><h2>Storage</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Storage guarda <strong>archivos binarios grandes</strong>: imágenes, vídeos, PDFs, audio, copias de seguridad, cualquier cosa que no encajaría en una fila de una base de datos. Cada proyecto recibe un <strong>cubo (bucket) compatible con el estándar de Amazon S3</strong>. Los archivos se sirven detrás de <strong>URLs firmadas</strong> (enlaces temporales y seguros), el control de acceso sigue el mismo modelo de seguridad por fila (RLS) que la base de datos, y la API de tipo S3 funciona con herramientas como <code class="inline">rclone</code>, la CLI de AWS o Terraform.</p>
+    <p>La documentación recomienda guardar los <strong>metadatos del archivo</strong> (propietario, nombre, tamaño, tipo) en una tabla normal de la base de datos, y dejar solo los bytes del archivo en Storage.</p>
+  </div>
+
+  <h3>Cómo se usa: subir, descargar y borrar un archivo</h3>
+<pre class="code">// Subir un archivo con una ruta concreta
+// (sustituye al archivo existente si ya había uno con esa ruta)
+const { data, error } = await insforge.storage
+  .from('images')
+  .upload('posts/post-123/cover.jpg', archivo);
+
+// Guardar la URL Y la clave (key) en la base de datos — necesitarás ambas
+await insforge.database
+  .from('posts')
+  .update({
+    image_url: data.url,
+    image_key: data.key,
+  })
+  .eq('id', 'post-123');
+
+// Descargar un archivo más tarde, usando la clave guardada
+const { data: post } = await insforge.database
+  .from('posts')
+  .select('image_key')
+  .eq('id', 'post-123')
+  .single();
+
+const { data: blob } = await insforge.storage
+  .from('images')
+  .download(post.image_key);
+
+// Borrar un archivo
+await insforge.storage.from('images').remove(post.image_key);</pre>
+  <div class="callout co-info"><div class="ct">ℹ️ Info</div><p>Si no necesitas elegir tú el nombre del archivo, existe también <code class="inline">uploadAuto()</code>, que genera una clave única automáticamente.</p></div>
+
+  <h3>El puente compatible con S3</h3>
+  <p>Además del SDK, InsForge expone una puerta de entrada compatible con el protocolo S3 en <code class="inline">/storage/v1/s3</code>, para que puedas usar herramientas ya existentes del ecosistema AWS. Un ejemplo con la CLI de AWS:</p>
+<pre class="code"># ~/.aws/credentials
+[insforge]
+aws_access_key_id = tu_access_key_id
+aws_secret_access_key = tu_secret_access_key
+
+# ~/.aws/config
+[profile insforge]
+region = us-east-2
+endpoint_url = https://tu-proyecto.region.insforge.app/storage/v1/s3
+s3 =
+  addressing_style = path
+
+aws --profile insforge s3 cp ./foto.jpg s3://mi-cubo/foto.jpg</pre>
+  <div class="tblwrap"><table>
+    <tr><th>Límite documentado</th><th>Valor</th></tr>
+    <tr><td>Subida directa (<code class="inline">PutObject</code>)</td><td>máximo 5 GB</td></tr>
+    <tr><td>Subida por partes (multipart)</td><td>hasta 5 TB</td></tr>
+    <tr><td>Claves de acceso por proyecto</td><td>hasta 50</td></tr>
+    <tr><td>Por este canal S3 <strong>no</strong> están soportadas</td><td>las URLs firmadas (para eso existe otro endpoint específico), ni los tokens de sesión, ni las URLs con estilo «virtual-hosted»</td></tr>
+  </table></div>
+</section>
+
+<!-- ==================== EDGE FUNCTIONS ==================== -->
+<section id="sec-functions" class="page">
+  <div class="sec-header"><div class="sec-icon">⚡</div><div><span class="sec-num">Capítulo 11</span><h2>Edge Functions</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Las Edge Functions («funciones de borde») son fragmentos de <strong>código TypeScript que se ejecutan sobre el motor Deno</strong>, cerca de tus usuarios, pensados para tareas cortas de tipo petición-respuesta. Se pueden invocar bajo demanda desde cualquier cliente, encadenar a partir de disparadores de base de datos (database triggers), o programar para ejecutarse según una expresión cron (sección Cron Jobs).</p>
+    <div class="callout co-warn"><div class="ct">⚠️ Atención</div><p>Si lo que necesitas es un proceso que se quede encendido de forma continua (por ejemplo, un trabajador de una cola de tareas), eso no es una Edge Function: es <strong>Custom Compute</strong>.</p></div>
+  </div>
+
+  <h3>¿Cuándo usarlas? La regla de decisión</h3>
+  <div class="callout co-ex"><div class="ct">✅ Regla sencilla (FAQ oficial)</div>
+  <p>¿Solo estás moviendo datos hacia dentro o hacia fuera de una tabla? Eso es la <strong>base de datos</strong> (API REST automática): no hace falta escribir ni desplegar nada.</p>
+  <p>¿Necesitas lógica propia del lado del servidor que se ejecuta y termina (un webhook de un pago, un enlace de autenticación, un trabajo programado)? Eso es una <strong>Edge Function</strong>.</p>
+  <p>¿Necesitas algo funcionando todo el tiempo (una cola, un bucle de inferencia de IA)? Eso es <strong>Custom Compute</strong>.</p></div>
+
+  <h3>Características principales</h3>
+  <div class="grid g2">
+    <div class="pcard" style="--pc:var(--accent)"><b>Disparadores HTTP</b><p>Cada función es accesible en <code class="inline">https://&lt;tu-proyecto&gt;.insforge.dev/functions/&lt;nombre&gt;</code>. Admite peticiones y respuestas estándar, incluyendo streaming (respuestas que llegan poco a poco) y websockets.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Programación por cron (Schedules)</b><p>Ver sección Cron Jobs.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Disparadores de base de datos</b><p>Puedes conectar una función para que se ejecute al hacer <code class="inline">INSERT</code>, <code class="inline">UPDATE</code> o <code class="inline">DELETE</code> sobre una tabla; la función recibe los datos de la fila y se ejecuta con un JWT de «rol de servicio» que le permite hacer escrituras privilegiadas después.</p></div>
+    <div class="pcard" style="--pc:var(--red)"><b>Registros (logs)</b><p>Cada invocación queda registrada, consultable por estado, duración y nombre de función. Un agente puede leerlos con la herramienta MCP <code class="inline">get-function-logs</code> para diagnosticar fallos sin salir del editor.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Biblioteca estándar de Deno</b><p>Puedes usar la biblioteca estándar de Deno y cualquier módulo ESM de <code class="inline">jsr.io</code>, <code class="inline">esm.sh</code> o especificadores <code class="inline">npm:</code>, sin necesidad de un empaquetador (bundler) ni carpeta <code class="inline">node_modules</code>.</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Secretos y variables de entorno</b><p>Se guardan y leen desde el panel, la CLI o el MCP. Los secretos se cifran en reposo (al listarlos, solo se ven los nombres, no los valores; puedes pedir el valor descifrado de uno concreto), pueden llevar fecha de caducidad y pueden marcarse como protegidos contra borrado. Las variables de entorno son valores de configuración normales, sin cifrar ni caducidad. Recomendación: credenciales y claves de API van en secretos; configuración no sensible va en variables de entorno.</p></div>
+  </div>
+<pre class="code"># secreto protegido con fecha de caducidad
+npx @insforge/cli secrets add STRIPE_SECRET_KEY sk_live_xxx --reserved --expires 2027-01-01T00:00:00Z
+
+# leer el valor descifrado
+npx @insforge/cli secrets get STRIPE_SECRET_KEY</pre>
+
+  <h3>Ejemplo práctico: una función pública y una función autenticada</h3>
+  <h4>Función pública, sin necesidad de que el usuario haya iniciado sesión</h4>
+<pre class="code">import { createClient } from 'npm:@insforge/sdk';
+
+export default async function (req: Request): Promise&lt;Response&gt; {
+  const client = createClient({
+    baseUrl: Deno.env.get('INSFORGE_BASE_URL'),
+    anonKey: Deno.env.get('ANON_KEY'),
+  });
+
+  const { data } = await client.database
+    .from('public_posts')
+    .select('*')
+    .limit(10);
+
+  return new Response(JSON.stringify({ data }), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  });
+}</pre>
+  <h4>Función que exige un usuario autenticado y escribe en su nombre</h4>
+<pre class="code">import { createClient } from 'npm:@insforge/sdk';
+
+export default async function (req: Request): Promise&lt;Response&gt; {
+  const authHeader = req.headers.get('Authorization');
+  const userToken = authHeader ? authHeader.replace('Bearer ', '') : null;
+
+  const client = createClient({
+    baseUrl: Deno.env.get('INSFORGE_BASE_URL'),
+    edgeFunctionToken: userToken,
+  });
+
+  const { data: userData } = await client.auth.getCurrentUser();
+  if (!userData?.user?.id) {
+    return new Response(JSON.stringify({ error: 'Unauthorized' }), { status: 401 });
+  }
+
+  await client.database.from('user_posts').insert([
+    { user_id: userData.user.id, content: 'Mi publicación' },
+  ]);
+
+  return new Response(JSON.stringify({ success: true }), { status: 200 });
+}</pre>
+</section>
+
+<!-- ==================== IA ==================== -->
+<section id="sec-ia" class="page">
+  <div class="sec-header"><div class="sec-icon">🧠</div><div><span class="sec-num">Capítulo 12</span><h2>AI y Model Gateway</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>El <strong>Model Gateway</strong> («puerta de enlace a modelos») permite llamar a modelos de chat, de streaming (respuesta que llega token a token) y de embeddings (representaciones numéricas de texto, muy usadas para búsqueda semántica) a través de un <strong>único endpoint compatible con la API de OpenAI</strong>. InsForge guarda las claves de los distintos proveedores por ti, controla el uso por proyecto y enruta el tráfico a través de <strong>OpenRouter</strong> (un servicio que da acceso a decenas de modelos de distintos proveedores con una sola clave), de forma que tu código nunca ve directamente las credenciales de Anthropic, OpenAI, Mistral, etc.</p>
+    <div class="callout co-info"><div class="ct">ℹ️ Aclaración</div><p>Si lo que quieres es ejecutar código de IA —orquestar prompts, hacer búsquedas, encadenar herramientas— eso son las <strong>Edge Functions</strong>; el Model Gateway es solo la llamada al modelo en sí, no el programa alrededor de esa llamada.</p></div>
+  </div>
+
+  <h3>Aviso importante sobre versiones</h3>
+  <div class="callout co-warn"><div class="ct">⚠️ Funciones obsoletas (deprecated)</div>
+  <p>La documentación oficial señala explícitamente que las funciones anteriores del SDK de InsForge para IA —<code class="inline">insforge.ai.chat.completions.create()</code>, <code class="inline">insforge.ai.images.generate()</code> e <code class="inline">insforge.ai.embeddings.create()</code>— están obsoletas. Siguen funcionando, mapeadas a rutas de compatibilidad, pero para integraciones nuevas la documentación recomienda usar directamente el <strong>SDK oficial de OpenAI apuntando a OpenRouter</strong> con la clave que InsForge te aprovisiona, porque así tienes acceso a toda la superficie de la API de OpenRouter sin esperar a que el SDK de InsForge se actualice.</p></div>
+  <div class="callout co-err"><div class="ct">⛔ Seguridad</div><p>Nunca expongas tu <code class="inline">OPENROUTER_API_KEY</code> en el código del navegador. En React, Next.js, Vue, Svelte y similares, las llamadas a OpenRouter deben hacerse siempre <strong>detrás de una ruta de servidor</strong> (una API route, una server action, una función), nunca directamente desde el frontend.</p></div>
+
+  <h3>Ejemplo práctico: chat, streaming y embeddings</h3>
+<pre class="code">npm install openai</pre>
+<pre class="code">import OpenAI from 'openai';
+
+const openai = new OpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+// Una llamada de chat normal
+const completion = await openai.chat.completions.create({
+  model: 'openai/gpt-4o',
+  messages: [
+    { role: 'system', content: 'Eres un asistente conciso.' },
+    { role: 'user', content: '¿Cuál es la capital de Francia?' },
+  ],
+});
+console.log(completion.choices[0]?.message?.content);
+
+// Streaming (la respuesta llega poco a poco)
+const stream = await openai.chat.completions.create({
+  model: 'anthropic/claude-3.5-haiku',
+  messages: [{ role: 'user', content: 'Escribe una novedad de producto breve.' }],
+  stream: true,
+});
+for await (const chunk of stream) {
+  const texto = chunk.choices[0]?.delta?.content;
+  if (texto) process.stdout.write(texto);
+}
+
+// Generar un embedding (representación numérica de un texto)
+const embedding = await openai.embeddings.create({
+  model: 'openai/text-embedding-3-small',
+  input: 'Texto de ejemplo',
+});</pre>
+  <p>Los identificadores de modelo siguen siempre el formato <code class="inline">proveedor/modelo</code>, por ejemplo <code class="inline">openai/gpt-4o</code>, <code class="inline">anthropic/claude-3.5-haiku</code> o <code class="inline">google/gemini-2.5-flash-image</code>.</p>
+  <div class="callout co-err"><div class="ct">⛔ Errores habituales</div><p>Usar la clave de OpenRouter directamente en código que se ejecuta en el navegador (queda expuesta a cualquiera); mezclar el SDK obsoleto de InsForge AI con el enfoque nuevo sin darte cuenta de que uno está desaconsejado para proyectos nuevos.</p></div>
+</section>
+
+<!-- ==================== REALTIME ==================== -->
+<section id="sec-realtime" class="page">
+  <div class="sec-header"><div class="sec-icon">📡</div><div><span class="sec-num">Capítulo 13</span><h2>Realtime</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Realtime sirve para cuando tu aplicación necesita <strong>actualizarse sola, sin que el usuario recargue la página</strong>. Los clientes se suscriben a canales (por ejemplo <code class="inline">pedido:123</code> o <code class="inline">chat:sala-1</code>) y reciben, por <strong>WebSocket</strong> (una conexión persistente y bidireccional entre el navegador y el servidor), tres tipos de eventos: <strong>cambios en la base de datos</strong>, <strong>mensajes enviados directamente por otros clientes (broadcasts)</strong> y <strong>estado de presencia</strong> (quién está conectado ahora mismo).</p>
+    <div class="callout co-info"><div class="ct">ℹ️ Aclaración</div><p>Si lo que necesitas es ejecutar lógica de servidor cuando cambia una fila (no solo avisar a los clientes conectados), eso es tarea de una Edge Function disparada por un trigger de base de datos; Realtime se encarga de entregar ese cambio a los clientes o a URLs de webhook configuradas, no de la lógica de negocio en sí.</p></div>
+  </div>
+
+  <h3>Cómo funciona: cambios en la base de datos hacia clientes conectados</h3>
+  <h4>Paso 1. Crea, en SQL, un disparador (trigger) que publique en un canal cuando cambie el estado de un pedido</h4>
+<pre class="code">CREATE OR REPLACE FUNCTION public.notify_order_status()
+RETURNS TRIGGER AS $$
+BEGIN
+  PERFORM realtime.publish(
+    'order:' || NEW.id::text,
+    'status_changed',
+    jsonb_build_object(
+      'id', NEW.id,
+      'status', NEW.status,
+      'updatedAt', NEW.updated_at
+    )
+  );
+  RETURN NEW;
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+CREATE TRIGGER order_status_realtime
+  AFTER UPDATE OF status ON public.orders
+  FOR EACH ROW
+  WHEN (OLD.status IS DISTINCT FROM NEW.status)
+  EXECUTE FUNCTION public.notify_order_status();</pre>
+  <h4>Paso 2. Desde el cliente, suscríbete al canal correspondiente</h4>
+<pre class="code">const canal = `order:${pedidoId}`;
+
+await insforge.realtime.connect();
+const suscripcion = await insforge.realtime.subscribe(canal);
+
+insforge.realtime.on('status_changed', (mensaje) => {
+  actualizarEstadoDelPedidoEnPantalla(mensaje.status);
+});</pre>
+  <div class="callout co-ex"><div class="ct">✅ ¿Qué acaba de ocurrir?</div><p>Cada vez que cambia la columna <code class="inline">status</code> de un pedido, el disparador de la base de datos publica un mensaje en el canal <code class="inline">order:&lt;id&gt;</code> correspondiente; todos los clientes suscritos a ese canal reciben el evento <code class="inline">status_changed</code> al instante, sin tener que preguntar (hacer polling) cada pocos segundos.</p></div>
+
+  <h3>Otras funciones de Realtime</h3>
+  <div class="grid g2">
+    <div class="pcard" style="--pc:var(--accent)"><b>Broadcasts de cliente</b><p>Los clientes pueden publicar mensajes directamente en un canal al que ya están suscritos (útil para indicadores de «escribiendo...», cursores compartidos, edición colaborativa).</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Webhooks</b><p>Puedes asociar URLs de webhook a un canal para que otro servicio externo reciba cada mensaje; InsForge reintenta los fallos de red transitorios.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Presencia</b><p>Al suscribirte a un canal recibes primero la lista de miembros conectados en ese momento, y después eventos <code class="inline">presence:join</code> y <code class="inline">presence:leave</code> a medida que la gente entra y sale. La presencia es solo estado «en línea»; la pertenencia duradera a una sala (roles, permisos) debe guardarse en tus propias tablas.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Seguridad por fila (RLS)</b><p>Puedes dejar los canales abiertos mientras prototipas, y luego cerrarlos con políticas de RLS sobre <code class="inline">realtime.channels</code> (quién puede suscribirse) y <code class="inline">realtime.messages</code> (quién puede publicar desde el cliente).</p></div>
+  </div>
+</section>
+
+<!-- ==================== SITES ==================== -->
+<section id="sec-sites" class="page">
+  <div class="sec-header"><div class="sec-icon">🌐</div><div><span class="sec-num">Capítulo 14</span><h2>Deployment y Sites</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Sites es la respuesta de InsForge a «¿cómo publico mi aplicación en internet?». La CLI sube el código fuente de tu frontend a través de InsForge, que crea un despliegue de producción en <strong>Vercel</strong> (una plataforma de hosting muy usada para aplicaciones web modernas). El panel de InsForge lleva el seguimiento de la URL, el estado, el historial de despliegues, las variables de entorno y los dominios.</p>
+    <div class="callout co-warn"><div class="ct">⚠️ No confundas</div><p>No confundas esto con autoalojar InsForge. Publicar tu app con Sites es desplegar la aplicación que tú construiste; autoalojar es instalar el propio backend de InsForge en tu servidor. Son cosas completamente distintas.</p></div>
+  </div>
+
+  <h3>Cómo se usa</h3>
+  <h4>Desplegar desde la carpeta de tu frontend</h4>
+<pre class="code">npx @insforge/cli deployments deploy ./frontend</pre>
+  <p>La CLI sube el árbol de archivos fuente, saltándose los archivos que no hacen falta en producción (<code class="inline">node_modules</code>, <code class="inline">.git</code>, la carpeta de compilación, los archivos <code class="inline">.env</code>), y arranca la compilación en Vercel a través de InsForge. Soporta React, Vue, Svelte, Next.js, sitios estáticos y otros proyectos de frontend: la propia Vercel detecta el framework a partir de archivos como <code class="inline">package.json</code> o <code class="inline">vercel.json</code>.</p>
+
+  <h4>Gestionar variables de entorno del despliegue</h4>
+  <p>Usa solo prefijos públicos como <code class="inline">VITE_</code> o <code class="inline">NEXT_PUBLIC_</code> para valores que sea seguro exponer en el navegador:</p>
+<pre class="code">npx @insforge/cli deployments env list
+npx @insforge/cli deployments env set VITE_INSFORGE_URL https://tu-proyecto.region.insforge.app
+npx @insforge/cli deployments env set VITE_INSFORGE_ANON_KEY ik_xxx</pre>
+
+  <h4>Revisar el historial de despliegues</h4>
+<pre class="code">npx @insforge/cli deployments list
+npx @insforge/cli deployments status deployment_123 --sync
+npx @insforge/cli deployments cancel deployment_123</pre>
+
+  <h4>Dominios</h4>
+  <p>Cada despliegue listo recibe automáticamente una URL en <code class="inline">https://&lt;clave-de-app&gt;.insforge.site</code>; también puedes definir un slug gestionado por InsForge (<code class="inline">https://&lt;slug&gt;.insforge.site</code>) o, para un dominio propio, añadirlo desde el panel y configurar el registro DNS que se te indique (normalmente un CNAME).</p>
+
+  <div class="callout co-warn"><div class="ct">⚠️ Nota sobre eliminar un sitio</div><p>Según la sección de preguntas frecuentes, actualmente <strong>no existe una forma de autoservicio para dar de baja por completo un sitio ya desplegado</strong> (no hay comando <code class="inline">deployments delete</code> ni acción de panel para ello). Borrar el proyecto (<code class="inline">projects delete</code>) elimina los recursos del backend, pero no retira el sitio ya publicado. Para eso hay que contactar con el equipo de InsForge por Discord. Sí puedes cancelar una compilación en marcha (<code class="inline">deployments cancel &lt;id&gt;</code>) o sustituir lo que está publicado volviendo a desplegar sobre el mismo sitio.</p></div>
+</section>
+
+<!-- ==================== CLI ==================== -->
+<section id="sec-cli" class="page">
+  <div class="sec-header"><div class="sec-icon">⌨️</div><div><span class="sec-num">Capítulo 15</span><h2>CLI</h2></div></div>
+  <p class="sec-lead">Ya has usado la CLI en varias secciones anteriores; esta sección la explica como herramienta en conjunto.</p>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p><code class="inline">@insforge/cli</code> es la interfaz que un agente de código usa para operar tu backend. Donde un humano abre el panel de control, el agente abre la terminal: ejecuta un comando, lee el resultado y decide qué hacer a continuación. <strong>Todos los comandos aceptan <code class="inline">--json</code></strong>, de forma que el agente trabaja con datos estructurados en lugar de tener que «leer» una pantalla.</p>
+    <div class="callout co-info"><div class="ct">ℹ️ Regla</div><p>Ejecuta siempre la CLI con <code class="inline">npx @insforge/cli</code>, sin instalarla de forma global, para que el agente use siempre la versión asociada a tu proyecto.</p></div>
+  </div>
+
+  <h3>Superficie de comandos</h3>
+  <div class="tblwrap"><table>
+    <tr><th>Área</th><th>Comandos</th></tr>
+    <tr><td>Autenticación y contexto</td><td><code class="inline">login</code>, <code class="inline">logout</code>, <code class="inline">whoami</code>, <code class="inline">current</code>, <code class="inline">list</code></td></tr>
+    <tr><td>Proyecto</td><td><code class="inline">create</code>, <code class="inline">link</code>, <code class="inline">projects update-version</code>, <code class="inline">projects delete</code></td></tr>
+    <tr><td>Esquema</td><td><code class="inline">db migrations new</code>, <code class="inline">db migrations up</code>, <code class="inline">db migrations list</code></td></tr>
+    <tr><td>Configuración como código</td><td><code class="inline">config plan</code>, <code class="inline">config apply</code>, <code class="inline">config export</code></td></tr>
+    <tr><td>Ramas (branching)</td><td><code class="inline">branch create</code>, <code class="inline">branch merge</code>, <code class="inline">branch reset</code>, <code class="inline">branch delete</code></td></tr>
+    <tr><td>Construcción</td><td><code class="inline">functions</code>, <code class="inline">storage</code>, <code class="inline">deployments</code>, <code class="inline">secrets</code>, <code class="inline">schedules</code>, <code class="inline">ai</code></td></tr>
+    <tr><td>Diagnóstico</td><td><code class="inline">diagnose</code>, <code class="inline">diagnose advisor</code>, <code class="inline">diagnose db</code>, <code class="inline">diagnose logs</code>, <code class="inline">metadata</code></td></tr>
+  </table></div>
+  <p>Para ver los modificadores (flags) de cualquier comando concreto:</p>
+<pre class="code">npx @insforge/cli help &lt;comando&gt;</pre>
+
+  <h3>Claves reservadas</h3>
+  <p>Cada proyecto trae, de fábrica, cuatro claves reservadas que puedes leer pero no editar ni borrar:</p>
+  <div class="tblwrap"><table>
+    <tr><th>Clave</th><th>Qué es</th></tr>
+    <tr><td><code class="inline">ANON_KEY</code></td><td>Clave pública de cliente, la que pasas como <code class="inline">anonKey</code> al crear un cliente del SDK</td></tr>
+    <tr><td><code class="inline">API_KEY</code></td><td>Clave de administrador (<code class="inline">ik_...</code>) para acceso privilegiado desde servidor y desde la CLI</td></tr>
+    <tr><td><code class="inline">JWT_SECRET</code></td><td>Secreto con el que InsForge firma y valida los JWT (HS256)</td></tr>
+    <tr><td><code class="inline">INSFORGE_BASE_URL</code></td><td>La URL base de la API de tu proyecto</td></tr>
+  </table></div>
+<pre class="code">npx @insforge/cli secrets list          # todas las claves, con los valores ocultos
+npx @insforge/cli secrets get ANON_KEY  # el valor descifrado de una clave concreta</pre>
+  <p>Para tus propias claves usa <code class="inline">secrets add</code>, <code class="inline">secrets update</code> y <code class="inline">secrets delete</code>; para rotar (renovar) la clave de API o la clave anónima con un periodo de gracia opcional, usa <code class="inline">secrets rotate api-key</code> o <code class="inline">secrets rotate anon-key</code>.</p>
+
+  <h3>Una sesión típica de trabajo con un agente</h3>
+<pre class="code"># conectar
+npx @insforge/cli login
+npx @insforge/cli link
+
+# leer el estado actual
+npx @insforge/cli --json metadata
+
+# cambiar el esquema, de forma segura
+npx @insforge/cli db migrations new add-orders-table
+npx @insforge/cli db migrations up --all
+
+# comprobar el resultado
+npx @insforge/cli diagnose --json</pre>
+
+  <h3>Que el agente interprete el resultado por ti</h3>
+<pre class="code">npx @insforge/cli diagnose --ai "¿por qué fallan las peticiones de autenticación después de la última migración?"</pre>
+  <p>Este modificador combina las señales en bruto (hallazgos del asesor de seguridad, salud de la base de datos, registros de error) con una explicación en lenguaje natural: la diferencia entre recibir «aquí tienes una traza de error» y recibir <strong>«aquí está el arreglo»</strong>.</p>
+</section>
+
+<!-- ==================== MCP ==================== -->
+<section id="sec-mcp" class="page">
+  <div class="sec-header"><div class="sec-icon">🔌</div><div><span class="sec-num">Capítulo 16</span><h2>MCP</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <p>MCP (Model Context Protocol) es un protocolo abierto que permite que tu editor de IA se conecte directamente a las herramientas de InsForge: consultas a la base de datos, gestión de almacenamiento, y más, todo sin salir del chat con tu agente.</p>
+
+  <h3>Qué herramientas expone el servidor MCP de InsForge</h3>
+  <p>Según la documentación oficial, una vez conectado, el servidor MCP de InsForge ofrece estas herramientas a tu asistente de IA (todas actúan sobre tu propio proyecto; las acciones de escritura y administración exigen tu clave de administrador):</p>
+  <div class="tblwrap"><table>
+    <tr><th>Área</th><th>Herramientas</th><th>Qué hace</th></tr>
+    <tr><td>Base de datos</td><td><code class="inline">get-table-schema</code>, <code class="inline">run-raw-sql</code>, <code class="inline">bulk-upsert</code></td><td>Leer el esquema, ejecutar SQL en bruto (modo estricto, solo administrador), insertar o actualizar en bloque</td></tr>
+    <tr><td>Almacenamiento</td><td><code class="inline">create-bucket</code>, <code class="inline">list-buckets</code>, <code class="inline">delete-bucket</code></td><td>Gestionar cubos de almacenamiento</td></tr>
+    <tr><td>Funciones</td><td><code class="inline">create-function</code>, <code class="inline">get-function</code>, <code class="inline">update-function</code>, <code class="inline">delete-function</code></td><td>Gestionar funciones Edge de Deno</td></tr>
+    <tr><td>Despliegue</td><td><code class="inline">create-deployment</code>, <code class="inline">start-deployment</code>, <code class="inline">get-container-logs</code></td><td>Desplegar tu app y leer los registros de contenedor</td></tr>
+    <tr><td>Configuración y documentación</td><td><code class="inline">fetch-docs</code>, <code class="inline">get-anon-key</code>, <code class="inline">get-backend-metadata</code></td><td>Traer documentación, generar una clave anónima, indexar metadatos del backend</td></tr>
+  </table></div>
+  <div class="callout co-warn"><div class="ct">⚠️ SQL en bruto</div><p>El SQL en bruto se ejecuta a través del mismo endpoint de «modo estricto» que usa la API REST: exige clave de administrador y bloquea el acceso a las tablas del sistema y a <code class="inline">auth.users</code>.</p></div>
+
+  <h3>Requisitos previos</h3>
+  <ul>
+    <li>Un asistente de código de IA compatible con MCP (Cursor, Claude Code, GitHub Copilot, etc.).</li>
+    <li>Un proyecto de InsForge ya creado.</li>
+  </ul>
+
+  <h3>Dos formas de instalarlo</h3>
+  <div class="grid g2">
+    <div class="card">
+      <h4>MCP remoto (la vía más rápida)</h4>
+      <p>Un solo comando intenta instalar y autenticar automáticamente:</p>
+<pre class="code">npx add-mcp https://mcp.insforge.dev/mcp</pre>
+      <p>Funciona con Claude Code, Claude Desktop, Codex, Cursor, Gemini CLI, Goose, GitHub Copilot, OpenCode y Zed. Tras ejecutarlo, según el editor, puede que tengas que autenticarte manualmente abriendo una ventana del navegador. En Claude Code el archivo de configuración generado (<code class="inline">.mcp.json</code>) queda así:</p>
+<pre class="code">{
+  "mcpServers": {
+    "insforge": {
+      "type": "http",
+      "url": "https://mcp.insforge.dev/mcp"
+    }
+  }
+}</pre>
+      <p>Y para autenticarte, desde una terminal normal (no la extensión del editor):</p>
+<pre class="code">claude /mcp</pre>
+      <p>Selecciona el servidor «insforge» y elige <strong>«Authenticate»</strong>.</p>
+    </div>
+    <div class="card">
+      <h4>MCP local (configuración manual)</h4>
+      <p>Si prefieres configurarlo tú mismo, la documentación detalla, editor por editor (Cursor, Claude Code, GitHub Copilot, Google Antigravity, Kiro, Codex, Cline, Windsurf, Trae, Qoder, Roo Code, OpenCode, o directamente pegando un JSON de configuración MCP), los pasos de instalación desde el propio panel de InsForge, en la sección <strong>Install → Tools &amp; MCP</strong>. Por limitación de espacio, esta guía no reproduce cada uno; la documentación oficial (<code class="inline">docs.insforge.dev/mcp-setup</code>) trae capturas y vídeos concretos para cada editor.</p>
+    </div>
+  </div>
+
+  <h3>Verificar la conexión</h3>
+  <p>En cualquiera de los dos casos, comprueba que funciona enviando este mensaje a tu agente, dentro de una conversación nueva:</p>
+<pre class="code">I'm using InsForge as my backend platform, call InsForge MCP's
+fetch-docs tool to learn about InsForge instructions.</pre>
+  <p>Si la conexión ha ido bien, verás el indicador <strong>«MCP Connected»</strong> en la esquina superior derecha del panel de tu proyecto.</p>
+
+  <h3>Solución de problemas</h3>
+  <div class="callout co-warn"><div class="ct">⚠️ Troubleshooting</div><p>Si haces cambios en la configuración de MCP y no surten efecto, la mayoría de los clientes de IA necesitan un <strong>reinicio completo de la aplicación</strong> (cerrarla del todo y volver a abrirla), no solo recargar la ventana.</p></div>
+</section>
+
+<!-- ==================== SKILLS ==================== -->
+<section id="sec-skills" class="page">
+  <div class="sec-header"><div class="sec-icon">📘</div><div><span class="sec-num">Capítulo 17</span><h2>Skills</h2></div></div>
+
+  <h3>¿Qué son?</h3>
+  <div class="card">
+    <p>La documentación oficial menciona las Skills («habilidades») como la segunda pieza, junto a la CLI, de la vía de conexión pensada para InsForge Cloud: <strong>«CLI + Skills»</strong>. Se trata de archivos de instrucciones que tu agente de código instala en tu proyecto para saber, desde el primer momento, cómo trabajar con InsForge: qué convenciones seguir y cómo usar sus herramientas correctamente. El propio mensaje de verificación de la guía de inicio rápido se lo pide explícitamente al agente: <em>«make sure InsForge skills are installed»</em> («asegúrate de que las Skills de InsForge están instaladas»).</p>
+    <p>En el repositorio oficial de InsForge en GitHub existen, de hecho, carpetas dedicadas a este propósito para distintos agentes, entre ellas <code class="inline">.claude/skills</code> (para Claude) y <code class="inline">.codex/skills/insforge-dev</code> (para Codex), lo que confirma que las Skills son archivos concretos empaquetados junto al propio proyecto InsForge, pensados para que el agente los lea antes de operar el backend.</p>
+  </div>
+
+  <h3>¿Cómo se instalan?</h3>
+  <p>La forma más sencilla, según los ejemplos oficiales, es pedírselo directamente a tu agente de código dentro del propio mensaje de conexión inicial (visto en Primeros pasos):</p>
+<pre class="code">I'm using InsForge as my backend platform. Read the current directory,
+make sure InsForge skills are installed, and use InsForge CLI for
+backend tasks.</pre>
+  <div class="callout co-info"><div class="ct">ℹ️ Nota de transparencia</div><p>La documentación oficial consultada no detalla, más allá de esto, un comando específico y documentado de la CLI dedicado solo a «instalar Skills», ni el formato interno completo de esos archivos. Lo que sí confirma la documentación es su propósito (dar contexto e instrucciones de InsForge al agente) y su presencia como carpetas concretas dentro del repositorio oficial del proyecto.</p></div>
+
+  <h3>Relación con CLI y MCP</h3>
+  <div class="grid g3">
+    <div class="card"><h4>🛠 La CLI</h4><p>Es <strong>«las manos»</strong> del agente: ejecuta las acciones.</p></div>
+    <div class="card"><h4>🔌 MCP</h4><p>Es <strong>«el cable»</strong> que conecta el editor de tu agente directamente con esas mismas herramientas sin pasar por la terminal.</p></div>
+    <div class="card"><h4>📘 Skills</h4><p>Son <strong>«el manual de instrucciones»</strong> que el agente lee para saber cómo comportarse dentro de un proyecto InsForge (qué comandos usar, en qué orden, qué convenciones respetar).</p></div>
+  </div>
+  <div class="callout co-ex"><div class="ct">✅ Conclusión</div><p>No compiten entre sí: en un proyecto bien configurado <strong>conviven los tres</strong>.</p></div>
+</section>
+
+<!-- ==================== AGENT-NATIVE ==================== -->
+<section id="sec-agentnative" class="page">
+  <div class="sec-header"><div class="sec-icon">🤖</div><div><span class="sec-num">Capítulo 18</span><h2>Agent-Native Development</h2></div></div>
+  <p class="sec-lead">Esta sección junta y profundiza en las piezas que hacen de InsForge una plataforma verdaderamente pensada para agentes, más allá de CLI, MCP y Skills.</p>
+
+  <h3>Por qué importa</h3>
+  <div class="card">
+    <p>Según la documentación oficial, una persona y un agente quieren cosas distintas de un backend. Una persona quiere una interfaz visual en la que hacer clic. Un agente quiere una <strong>interfaz de texto estable</strong> que pueda manejar, leer de vuelta y sobre la que pueda razonar. Esa filosofía se nota en cuatro primitivas concretas.</p>
+  </div>
+
+  <h3>18.1 — CLI harness («el arnés de la CLI»)</h3>
+  <p>Ya descrito en la sección CLI: una única herramienta de terminal que cubre login, esquema, despliegues, configuración y diagnóstico, con salida en JSON opcional para que el agente la procese como datos.</p>
+
+  <h3>18.2 — Diagnostics &amp; Advisor (diagnóstico y asesor)</h3>
+  <p>Cuando algo se rompe, un agente no debería tener que adivinar. El comando <code class="inline">diagnose</code> convierte las señales propias del backend en algo que el agente puede consultar y sobre lo que puede actuar directamente: hallazgos del asesor con su remediación, comprobaciones de salud de la base de datos, métricas de la instancia y registros de error agrupados.</p>
+<pre class="code">npx @insforge/cli diagnose
+npx @insforge/cli diagnose --json</pre>
+  <p>El <strong>Backend Advisor</strong> («asesor de backend») escanea en busca de problemas de seguridad, rendimiento y salud, y escribe una remediación para cada uno. El panel muestra un botón «Copy Remediation» («copiar remediación»), pero el agente no necesita el panel: obtiene el mismo escaneo directamente con <code class="inline">--json</code> y aplica el arreglo él mismo.</p>
+<pre class="code">npx @insforge/cli diagnose advisor
+npx @insforge/cli diagnose advisor --json</pre>
+  <div class="callout co-ex"><div class="ct">✅ Ejemplo típico</div><p>Un hallazgo típico es una política de RLS demasiado permisiva que expone una tabla a usuarios anónimos. El asesor indica la tabla, la gravedad y el SQL para corregirlo; el agente aplica esa remediación como una migración versionada y vuelve a escanear para confirmar que el problema quedó resuelto.</p></div>
+  <h4>Comprobaciones concretas, por separado</h4>
+  <div class="tblwrap"><table>
+    <tr><th>Comando</th><th>Qué comprueba</th></tr>
+    <tr><td><code class="inline">diagnose advisor</code></td><td>Último escaneo del asesor: problemas de seguridad, rendimiento y salud</td></tr>
+    <tr><td><code class="inline">diagnose db</code></td><td>Salud de la base de datos: conexiones, «hinchazón» de tablas, uso de índices</td></tr>
+    <tr><td><code class="inline">diagnose metrics</code></td><td>Métricas de la instancia: CPU, memoria, disco y red</td></tr>
+    <tr><td><code class="inline">diagnose logs</code></td><td>Registros de nivel error agregados de todas las fuentes del backend</td></tr>
+  </table></div>
+  <p>Para registros en bruto de una única fuente:</p>
+<pre class="code">npx @insforge/cli logs function.logs
+npx @insforge/cli logs postgres.logs</pre>
+  <p>Y para pedirle a un modelo de IA que interprete los datos de diagnóstico en lenguaje llano:</p>
+<pre class="code">npx @insforge/cli diagnose --ai "¿por qué se disparó la latencia de escritura después del último despliegue?"</pre>
+
+  <h3>18.3 — Config as code (configuración como código)</h3>
+  <div class="card">
+    <p><code class="inline">insforge.toml</code> es una instantánea declarativa y versionada de una parte de la configuración de tu proyecto: la política de autenticación, las URLs de redirección permitidas, las reglas de contraseña, el SMTP, el tamaño máximo de subida de almacenamiento, la retención de tiempo real y de programaciones, y el subdominio de despliegue. La CLI ofrece tres comandos:</p>
+    <ul>
+      <li><code class="inline">config plan</code>: compara <code class="inline">insforge.toml</code> con el proyecto real y muestra qué cambiaría.</li>
+      <li><code class="inline">config apply</code>: aplica esa diferencia al proyecto real.</li>
+      <li><code class="inline">config export</code>: descarga la configuración actual del proyecto y la escribe en un <code class="inline">insforge.toml</code> nuevo (útil para arrancar el archivo a partir de un proyecto que ya configuraste desde el panel).</li>
+    </ul>
+    <p>Se mantiene un único <code class="inline">insforge.toml</code> en tu repositorio; para aplicarlo a un entorno distinto (preproducción, producción, el backend local de un compañero, o una instancia autoalojada), apuntas la CLI a otro proyecto (volviendo a enlazar o usando <code class="inline">--project-id</code>) y aplicas de nuevo. Los secretos se leen desde variables de entorno mediante referencias <code class="inline">env(...)</code>, de forma que el archivo en sí queda libre de credenciales y se puede subir a Git sin problema.</p>
+  </div>
+  <h4>Ejemplo completo de archivo</h4>
+<pre class="code">[auth]
+require_email_verification = true
+verify_email_method = "code"
+reset_password_method = "code"
+disable_signup = false
+allowed_redirect_urls = [
+  "https://app.ejemplo.com/auth/callback",
+  "http://localhost:3000/auth/callback",
+]
+
+[auth.password]
+min_length = 12
+require_number = true
+require_lowercase = true
+require_uppercase = true
+require_special_char = false
+
+[auth.smtp]
+enabled = true
+host = "smtp.sendgrid.net"
+port = 587
+username = "apikey"
+password = "env(SENDGRID_API_KEY)"
+sender_email = "noreply@ejemplo.com"
+sender_name = "Acme"
+
+[storage]
+max_file_size_mb = 100
+
+[realtime]
+retention_days = 7
+
+[schedules]
+retention_days = 0
+
+[deployments]
+subdomain = "acme-prod"</pre>
+  <h4>Flujo de trabajo recomendado por la documentación</h4>
+  <ol class="steps">
+    <li><b class="t">Si ya configuraste el proyecto desde el panel, exporta primero para partir de un archivo real</b>
+<pre class="code">npx @insforge/cli config export</pre></li>
+    <li><b class="t">Sube ese insforge.toml a tu control de versiones (Git).</b></li>
+    <li><b class="t">Edita el archivo y previsualiza el cambio</b>
+<pre class="code">npx @insforge/cli config plan</pre></li>
+    <li><b class="t">Aplícalo</b>
+<pre class="code">npx @insforge/cli config apply</pre></li>
+    <li><b class="t">Para aplicar el mismo archivo a otro proyecto (preproducción, por ejemplo)</b>
+<pre class="code">npx @insforge/cli --project-id &lt;id-de-preproduccion&gt; config apply</pre></li>
+  </ol>
+  <div class="callout co-info"><div class="ct">ℹ️ CI/CD</div><p>En CI/CD (integración continua), usa <code class="inline">config apply --auto-approve --json</code> para saltarte la confirmación interactiva, que no tiene sentido en un proceso automático sin terminal humana delante.</p></div>
+
+  <h3>18.4 — Backend Branching (ramas de backend)</h3>
+  <p>Ver la sección dedicada en exclusiva a Backend Branching.</p>
+
+  <h3>El ciclo completo de trabajo de un agente</h3>
+  <p>Según la documentación, una sesión típica de un agente con InsForge encadena estas cuatro primitivas así:</p>
+  <ol class="steps">
+    <li><b class="t">Leer el estado actual</b><p>Con <code class="inline">npx @insforge/cli metadata</code>.</p></li>
+    <li><b class="t">Crear una rama y escribir el cambio</b><p>Crear una rama del backend y escribir una migración (comprobando lo pendiente con <code class="inline">db migrations list</code>), o editar <code class="inline">insforge.toml</code> y previsualizar el cambio con <code class="inline">config plan</code>.</p></li>
+    <li><b class="t">Aplicarlo</b><p>Con <code class="inline">db migrations up --all</code> o <code class="inline">config apply</code>, primero contra la rama, después contra el proyecto padre.</p></li>
+    <li><b class="t">Diagnosticar</b><p>Ejecutar <code class="inline">diagnose</code> para revisar hallazgos del asesor y registros de error, y pedir <code class="inline">diagnose --ai</code> para que se lo interprete.</p></li>
+    <li><b class="t">Remediar y fusionar</b><p>Aplicar la remediación, volver a ejecutar <code class="inline">diagnose</code>, y fusionar (merge) la rama.</p></li>
+  </ol>
+</section>
+
+<!-- ==================== SDKs ==================== -->
+<section id="sec-sdks" class="page">
+  <div class="sec-header"><div class="sec-icon">🧩</div><div><span class="sec-num">Capítulo 19</span><h2>SDKs y APIs</h2></div></div>
+  <p class="sec-lead">InsForge ofrece cuatro formas de hablar con tu backend desde código: un SDK de <strong>TypeScript/JavaScript</strong>, un SDK de <strong>Swift</strong> (iOS, macOS, tvOS y watchOS), un SDK de <strong>Kotlin</strong> (Android y Kotlin Multiplatform), y una <strong>API REST</strong> en bruto que funciona desde cualquier lenguaje.</p>
+
+  <h3>El SDK de TypeScript, en detalle</h3>
+  <h4>Instalación</h4>
+<pre class="code">npm install @insforge/sdk@latest</pre>
+  <h4>Inicialización</h4>
+<pre class="code">import { createClient } from '@insforge/sdk';
+
+const insforge = createClient({
+  baseUrl: 'https://tu-app.insforge.app',
+  anonKey: 'tu-clave-anon', // opcional: para peticiones públicas / sin autenticar
+});</pre>
+  <p>Puedes encontrar tu clave «anon» con <code class="inline">npx @insforge/cli secrets get ANON_KEY</code>, o en el panel, pulsando <strong>Install → API Keys</strong>.</p>
+
+  <h4>Consultas a la base de datos (<code class="inline">insforge.database</code>)</h4>
+<pre class="code">// Insertar
+const { data, error } = await insforge.database
+  .from('posts')
+  .insert({ title: 'Hola mundo', content: 'Mi primera publicación' })
+  .select();
+
+// Consultar con filtros
+const { data: productos } = await insforge.database
+  .from('products')
+  .select('id, name, price, category')
+  .eq('category', 'electronica')
+  .gte('price', 50)
+  .lte('price', 500)
+  .order('price', { ascending: true })
+  .limit(20);
+
+// Actualizar (siempre con un filtro que acote las filas afectadas)
+await insforge.database
+  .from('posts')
+  .update({ title: 'Título actualizado' })
+  .eq('id', idDelPost)
+  .select();
+
+// Borrar (siempre con un filtro)
+await insforge.database.from('posts').delete().eq('id', idDelPost);
+
+// Llamar a una función SQL (RPC)
+const { data: stats } = await insforge.database.rpc('get_user_stats', { user_id: '123' });</pre>
+  <div class="callout co-info"><div class="ct">ℹ️ Filtros y modificadores</div>
+  <p><strong>Filtros disponibles:</strong> <code class="inline">.eq()</code>, <code class="inline">.neq()</code>, <code class="inline">.gt()</code>, <code class="inline">.gte()</code>, <code class="inline">.lt()</code>, <code class="inline">.lte()</code>, <code class="inline">.like()</code>, <code class="inline">.ilike()</code>, <code class="inline">.in()</code>, <code class="inline">.is()</code>.</p>
+  <p><strong>Modificadores:</strong> <code class="inline">.order()</code>, <code class="inline">.limit()</code>, <code class="inline">.range()</code> (para paginación), <code class="inline">.single()</code> (devuelve un objeto en lugar de un array; lanza error si hay más de uno) y <code class="inline">.maybeSingle()</code> (igual, pero sin error si no hay ninguno).</p></div>
+  <ul>
+    <li><strong>Autenticación</strong> (<code class="inline">insforge.auth</code>): <code class="inline">signUp</code>, <code class="inline">signInWithPassword</code>, <code class="inline">signInWithOAuth</code>, <code class="inline">signOut</code>, <code class="inline">getCurrentUser</code>, <code class="inline">getProfile</code>, <code class="inline">setProfile</code>, y todo el flujo de verificación de email y restablecimiento de contraseña.</li>
+    <li><strong>Almacenamiento</strong> (<code class="inline">insforge.storage</code>): <code class="inline">upload</code>, <code class="inline">uploadAuto</code>, <code class="inline">download</code>, <code class="inline">remove</code>.</li>
+    <li><strong>Funciones</strong> (<code class="inline">insforge.functions</code>): <code class="inline">invoke</code>.</li>
+  </ul>
+
+  <h4>Clave de administrador (<code class="inline">createAdminClient</code>)</h4>
+  <p>Para operaciones de servidor que necesitan saltarse RLS (por ejemplo, un proceso interno que debe poder leer o escribir cualquier fila), la documentación recomienda un cliente distinto:</p>
+<pre class="code">import { createAdminClient } from '@insforge/sdk';
+
+const admin = createAdminClient({
+  baseUrl: process.env.INSFORGE_URL,
+  apiKey: process.env.INSFORGE_API_KEY, // clave de administrador (ik_...), se salta RLS
+});</pre>
+  <div class="callout co-err"><div class="ct">⛔ Advertencia</div><p>Esta clave nunca debe usarse desde el navegador ni guardarse en una variable de entorno expuesta al cliente (nada de prefijos <code class="inline">NEXT_PUBLIC_</code>, <code class="inline">VITE_</code> o <code class="inline">PUBLIC_</code>): solo en código de servidor de confianza.</p></div>
+
+  <h3>La API REST</h3>
+  <p>Para lenguajes sin SDK oficial, InsForge expone una API REST completa. La autenticación se hace siempre con una cabecera <code class="inline">Authorization: Bearer &lt;token&gt;</code>:</p>
+<pre class="code"># Registrar un usuario nuevo
+curl -X POST https://tu-app.insforge.app/api/auth/users \
+  -H "Content-Type: application/json" \
+  -d '{"email": "usuario@ejemplo.com", "password": "contraseñasegura123"}'
+
+# Iniciar sesión y obtener un token
+curl -X POST https://tu-app.insforge.app/api/auth/sessions \
+  -H "Content-Type: application/json" \
+  -d '{"email": "usuario@ejemplo.com", "password": "contraseñasegura123"}'
+
+# Usar el token en una petición autenticada
+curl https://tu-app.insforge.app/api/database/records/posts \
+  -H "Authorization: Bearer tu-token-jwt"</pre>
+  <p>Las respuestas correctas devuelven los datos directamente en el cuerpo; los errores siguen esta forma:</p>
+<pre class="code">{
+  "error": "ERROR_CODE",
+  "message": "Mensaje de error legible",
+  "statusCode": 400,
+  "nextActions": "Acción sugerida para resolver el error"
+}</pre>
+
+  <h3>¿Y el resto de SDKs?</h3>
+  <div class="callout co-info"><div class="ct">ℹ️ Swift y Kotlin</div><p>El SDK de Swift y el de Kotlin siguen la misma forma general que el de TypeScript (clientes para base de datos, autenticación, almacenamiento, funciones, IA y tiempo real), adaptados a los patrones propios de cada lenguaje (por ejemplo, modelos <code class="inline">Codable</code> en Swift, o corrutinas y clases serializables con Kotlinx en Kotlin). Esta guía se centra en TypeScript por ser el más usado en los ejemplos y guías de frameworks de la documentación oficial; para el detalle exacto de cada método en Swift o Kotlin, la documentación oficial consultada remite a sus páginas específicas (<code class="inline">docs.insforge.dev/sdks/swift/</code> y <code class="inline">docs.insforge.dev/sdks/kotlin/</code>).</p></div>
+</section>
+
+<!-- ==================== VECTOR ==================== -->
+<section id="sec-vector" class="page">
+  <div class="sec-header"><div class="sec-icon">🧬</div><div><span class="sec-num">Capítulo 20</span><h2>Vector Store (pgvector)</h2></div></div>
+  <div class="callout co-info"><div class="ct">ℹ️ Aclaración importante</div><p>InsForge, según la documentación oficial consultada, <strong>no tiene un producto separado llamado «Vector Store»</strong>. La funcionalidad de búsqueda vectorial forma parte del producto Database, a través de la extensión <code class="inline">pgvector</code> de PostgreSQL. Se explica aquí como sección independiente porque es una capacidad muy usada en aplicaciones con IA (para búsqueda semántica y RAG), pero técnicamente vive dentro de tu base de datos Postgres, no como un servicio aparte.</p></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p><code class="inline">pgvector</code> es una extensión de PostgreSQL que viene ya instalada en todo proyecto de InsForge. Sirve para guardar <strong>embeddings</strong> (representaciones numéricas de un texto, una imagen u otro contenido) y hacer búsquedas por similitud entre ellos: <strong>búsqueda semántica, recomendaciones y RAG</strong> (Retrieval-Augmented Generation, «generación aumentada por recuperación»: la técnica de buscar primero información relevante y dársela a un modelo de IA como contexto antes de que responda).</p>
+  </div>
+
+  <h3>¿Cómo funciona conceptualmente?</h3>
+  <p>Un vector es, sencillamente, una lista de números que representa un elemento (por ejemplo, un párrafo de texto). Dos vectores son «parecidos» si están cerca uno del otro en ese espacio de números. La técnica consiste en guardar el vector junto a su fila, convertir la consulta del usuario en un vector con el mismo modelo, y dejar que <code class="inline">pgvector</code> ordene los resultados por cercanía.</p>
+
+  <h3>Ejemplo práctico</h3>
+  <ol class="steps">
+    <li><b class="t">Activar la extensión y crear una tabla con una columna de tipo vector</b>
+      <p>La dimensión debe coincidir con el modelo que uses; <code class="inline">text-embedding-3-small</code> usa 1536 dimensiones:</p>
+<pre class="code">create extension if not exists vector;
+
+create table documents (
+  id bigserial primary key,
+  content text,
+  embedding vector(1536)
+);</pre></li>
+    <li><b class="t">Generar el embedding en el servidor e insertarlo</b>
+<pre class="code">import OpenAI from 'openai';
+import { createClient } from '@insforge/sdk';
+
+const openai = new OpenAI({
+  baseURL: 'https://openrouter.ai/api/v1',
+  apiKey: process.env.OPENROUTER_API_KEY,
+});
+
+const insforge = createClient({ projectId: process.env.INSFORGE_PROJECT_ID });
+
+const { data } = await openai.embeddings.create({
+  model: 'openai/text-embedding-3-small',
+  input: 'hola mundo',
+});
+
+await insforge.database.from('documents').insert({
+  content: 'hola mundo',
+  embedding: data[0].embedding,
+});</pre></li>
+    <li><b class="t">Consultar por distancia coseno</b>
+      <p>El operador <code class="inline">&lt;=&gt;</code>; también existen la distancia euclídea <code class="inline">&lt;-&gt;</code> y el producto interno <code class="inline">&lt;#&gt;</code>:</p>
+<pre class="code">select id, content
+from documents
+order by embedding &lt;=&gt; $1
+limit 5;</pre></li>
+  </ol>
+  <p>Para mantener el cálculo del lado del servidor, la documentación recomienda envolver la búsqueda en una función de PostgreSQL y llamarla con <code class="inline">rpc()</code>:</p>
+<pre class="code">create or replace function match_documents(
+  query_embedding vector(1536),
+  match_count int default 5,
+  match_threshold float default 0
+)
+returns table (id bigint, content text, similarity float)
+language sql stable
+as $$
+  select id, content, 1 - (embedding &lt;=&gt; query_embedding) as similarity
+  from documents
+  where 1 - (embedding &lt;=&gt; query_embedding) &gt; match_threshold
+  order by embedding &lt;=&gt; query_embedding
+  limit match_count;
+$$;</pre>
+  <div class="callout co-info"><div class="ct">ℹ️ Rendimiento</div><p>A partir de unas <strong>10.000 filas</strong>, la documentación recomienda añadir un índice HNSW para acelerar la búsqueda:</p></div>
+<pre class="code">create index on documents using hnsw (embedding vector_cosine_ops);</pre>
+</section>
+
+<!-- ==================== CRON ==================== -->
+<section id="sec-cron" class="page">
+  <div class="sec-header"><div class="sec-icon">⏰</div><div><span class="sec-num">Capítulo 21</span><h2>Cron Jobs (Schedules)</h2></div></div>
+  <div class="callout co-info"><div class="ct">ℹ️ Aclaración</div><p>En la documentación oficial, esta función se llama <strong>Schedules</strong> («programaciones») y forma parte del producto Edge Functions, no de una categoría separada. Se explica aquí en detalle porque encaja con el concepto habitual de «cron job» (una tarea programada que se repite).</p></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Un Schedule invoca una Edge Function según una <strong>expresión cron</strong> (una notación estándar para expresar «cada cuánto» se repite algo). Por debajo, InsForge usa <strong>pg_cron</strong>, una extensión de PostgreSQL que dispara una petición HTTP a la URL de la función en cada «tic» y registra el resultado.</p>
+  </div>
+
+  <h3>Cómo funciona</h3>
+  <p>Al crear una programación, cualquier valor con la forma <code class="inline">${{secrets.CLAVE}}</code> dentro de las cabeceras se resuelve y se cifra con <code class="inline">pgcrypto</code>. En cada disparo, una función interna (<code class="inline">execute_job()</code>) descifra las cabeceras, llama a la función y anota el estado y la duración en <code class="inline">schedules.job_logs</code>.</p>
+
+  <h4>Sintaxis cron básica</h4>
+<pre class="code">*/5 * * * *   cada 5 minutos
+0 * * * *     cada hora
+0 0 * * *     todos los días a medianoche
+0 9 * * 1     todos los lunes a las 9:00
+0 0 1 * *     el primer día de cada mes</pre>
+
+  <h4>Ejemplo práctico: crear una programación por SQL</h4>
+<pre class="code">select schedules.create_job(
+  name       =&gt; 'daily-cleanup',
+  schedule   =&gt; '0 0 * * *',
+  url        =&gt; 'https://miapp.functions.insforge.app/cleanup',
+  headers    =&gt; jsonb_build_object('Authorization', 'Bearer ${{secrets.CRON_TOKEN}}')
+);</pre>
+  <p>También se pueden crear desde el panel de control.</p>
+
+  <h3>Límites y errores habituales</h3>
+  <div class="callout co-warn"><div class="ct">⚠️ Límites documentados</div>
+  <p>• El intervalo mínimo es de <strong>1 minuto</strong>, por limitación de <code class="inline">pg_cron</code>.</p>
+  <p>• Las ejecuciones fallidas quedan registradas pero <strong>no se reintentan automáticamente</strong>, así que tu función debe ser <strong>idempotente</strong> (poder ejecutarse varias veces sin causar un problema si, por ejemplo, se dispara dos veces por error).</p>
+  <p>• Borrar un secreto que usa una programación activa <strong>rompe todos los trabajos</strong> que dependen de él, hasta que actualices o desactives esa programación.</p>
+  <p>• <strong>Conexiones inactivas</strong>: el backend cierra las conexiones HTTP inactivas a los <strong>65 segundos</strong> por defecto. Una programación que se dispara con menos frecuencia que eso (por ejemplo, cada 5 minutos) siempre encuentra, del lado del servidor, una conexión reutilizable ya cerrada, lo que puede hacer que la primera petición de una función «en frío» tarde hasta <strong>30 segundos</strong> en responder. La documentación sugiere dos soluciones: fijar un tiempo de espera corto del lado del cliente y reintentar una vez con una conexión nueva, o enviar la cabecera <code class="inline">Connection: close</code> para forzar una conexión nueva en cada disparo.</p></div>
+</section>
+
+<!-- ==================== COMPUTE ==================== -->
+<section id="sec-compute" class="page">
+  <div class="sec-header"><div class="sec-icon">🐳</div><div><span class="sec-num">Capítulo 22</span><h2>Custom Compute</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Custom Compute ejecuta <strong>contenedores de larga duración</strong> junto a tu proyecto: trabajadores de colas de tareas, procesos en segundo plano, bucles de inferencia de IA, servidores de websockets, scrapers (programas que recorren páginas web extrayendo datos)... en general, cualquier cosa que necesite quedarse encendida.</p>
+    <div class="callout co-info"><div class="ct">ℹ️ Regla</div><p>Si solo necesitas responder a una petición puntual, eso son Edge Functions; Custom Compute es para procesos que deben seguir ejecutándose de forma continua.</p></div>
+  </div>
+
+  <h3>Cómo funciona</h3>
+  <ul>
+    <li>Puedes desplegar cualquier <strong>imagen de Docker ya construida</strong> apuntando a un registro, o subir un <strong>contexto de compilación</strong> (los archivos fuente) para que InsForge construya la imagen a partir de tu <code class="inline">Dockerfile</code>, sin que tengas que aprender ningún sistema de compilación propietario.</li>
+    <li><strong>Recursos</strong>: memoria y CPU son configurables por servicio; cada servicio corre una única instancia (si necesitas varios trabajadores, despliega varios servicios).</li>
+  </ul>
+  <div class="callout co-warn"><div class="ct">⚠️ Aviso oficial: sin volúmenes persistentes</div><p>De momento no hay volúmenes persistentes. El estado del contenedor sobrevive a reinicios y reinicios del servidor, pero cambiar la imagen, las variables de entorno o el puerto <strong>recrea el contenedor y descarta cualquier cosa escrita dentro de él</strong>. Para datos que necesites conservar, usa la base de datos Postgres o Storage del propio proyecto.</p></div>
+
+  <h3>En InsForge Cloud frente a autoalojado</h3>
+  <p>En <strong>InsForge Cloud</strong>, Compute está totalmente gestionado, no hay nada que configurar. En <strong>autoalojamiento</strong>, tú eliges dónde corren los contenedores, entre dos proveedores; hasta que configures uno, los endpoints de compute devuelven el error <code class="inline">503 COMPUTE_NOT_CONFIGURED</code>:</p>
+  <div class="grid g2">
+    <div class="card">
+      <h4>🐳 Docker (tu propio servidor)</h4>
+      <p>Los contenedores corren en el mismo demonio Docker que ejecuta InsForge. Activarlo consiste en descomentar, en tu archivo de Docker Compose, la línea que monta el socket de Docker dentro del contenedor de InsForge:</p>
+<pre class="code">services:
+  insforge:
+    volumes:
+      - ${DOCKER_SOCKET_PATH:-/var/run/docker.sock}:${DOCKER_SOCKET_PATH:-/var/run/docker.sock}</pre>
+      <div class="callout co-warn"><div class="ct">⚠️ Advertencia</div><p>El socket de Docker equivale a <strong>acceso de administrador (root)</strong> sobre el servidor. Quien pueda llegar a él puede arrancar un contenedor que lea todo el sistema de archivos, así que montarlo es una decisión que hay que tomar con conocimiento de causa. Según la documentación, InsForge construye siempre él mismo la especificación de cada contenedor y nunca reenvía opciones proporcionadas por quien llama, así que una clave de API filtrada no puede pedir un contenedor privilegiado ni un montaje del sistema de archivos del servidor — pero el propio socket sigue siendo tan potente como la cuenta que lo posee.</p></div>
+    </div>
+    <div class="card">
+      <h4>🪁 Fly.io</h4>
+      <p>Los contenedores corren en tu propia cuenta de Fly.io. Se activa con dos variables de entorno en tu <code class="inline">.env</code>: <code class="inline">FLY_API_TOKEN</code> (un token de API de Fly.io con alcance de organización) y <code class="inline">FLY_ORG</code> (el identificador de tu organización en Fly). <strong>Ambas son obligatorias.</strong></p>
+    </div>
+  </div>
+
+  <h3>Cómo se hace accesible un servicio</h3>
+  <div class="tblwrap"><table>
+    <tr><th>Modo de ingreso (ingress)</th><th>Comportamiento</th></tr>
+    <tr><td><code class="inline">none</code></td><td>Solo accesible dentro de la red interna del proyecto, sin puerto publicado — el valor por defecto en un único servidor, porque la mayoría de las cargas de Compute no reciben tráfico entrante en absoluto.</td></tr>
+    <tr><td><code class="inline">port</code></td><td>Publicado en un puerto que asigna el demonio.</td></tr>
+    <tr><td><code class="inline">host</code></td><td>Accesible en un nombre de host que tú enrutas por tu cuenta. InsForge anuncia el nombre de host, pero no termina el TLS ni enruta el tráfico: hay que poner tu propio proxy (Caddy, Traefik, nginx) delante, igual que ya haces para el propio panel de InsForge.</td></tr>
+  </table></div>
+</section>
+
+<!-- ==================== ANALYTICS ==================== -->
+<section id="sec-analytics" class="page">
+  <div class="sec-header"><div class="sec-icon">📊</div><div><span class="sec-num">Capítulo 23</span><h2>Analytics</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Analytics te ayuda a entender cómo usa la gente tu aplicación de verdad: <strong>tráfico de páginas, retención de usuarios y grabaciones de sesión</strong>, todo ello conectando un proyecto de <strong>PostHog</strong> (una plataforma de analítica de producto) a tu backend de InsForge. Una vez conectado, el propio panel de InsForge muestra páginas de Tráfico, Retención de usuarios y Grabación de sesión construidas sobre tus datos de PostHog, sin que tengas que salir de InsForge.</p>
+    <div class="callout co-info"><div class="ct">ℹ️ Fuente de verdad</div><p>PostHog sigue siendo la fuente de verdad de eventos, paneles, análisis y grabaciones; InsForge muestra un subconjunto útil para comprobaciones del día a día, y enlaza directamente a PostHog para todo lo demás.</p></div>
+  </div>
+
+  <h3>Cómo se configura</h3>
+  <ol class="steps">
+    <li><b class="t">Conectar PostHog</b><p>En la página de Analytics del panel, pulsa <strong>Connect PostHog</strong>. InsForge crea o vincula un proyecto de PostHog por ti y guarda las credenciales del lado del servidor.</p></li>
+    <li><b class="t">Pegar el mensaje en tu agente</b><p>Una vez conectado, se te ofrece un mensaje listo para pegar en tu agente de código:</p>
+<pre class="code">I want to add product analytics to this project. Read the current
+directory and use the InsForge skill to set up PostHog analytics by
+running `npx @insforge/cli posthog setup`.</pre></li>
+    <li><b class="t">Ejecutar el setup</b><p><code class="inline">npx @insforge/cli posthog setup</code> enlaza tu proyecto de InsForge con PostHog y, a continuación, imprime el comando oficial del asistente de instalación de PostHog (<code class="inline">npx -y @posthog/wizard@latest</code>) para que lo ejecutes tú o tu agente. Ese asistente detecta el framework de tu frontend, instala el SDK de PostHog que corresponde y añade el código de inicialización, de forma que las vistas de página, los eventos automáticos y las grabaciones de sesión empiezan a llegar.</p></li>
+  </ol>
+
+  <h3>Qué páginas incluye</h3>
+  <div class="grid g3">
+    <div class="pcard" style="--pc:var(--accent)"><b>Traffic (tráfico)</b><p>Indicadores clave del periodo elegido (visitantes, vistas de página, sesiones, tasa de rebote y su tendencia), con desgloses por página, país y tipo de dispositivo.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>User retention (retención)</b><p>Un gráfico de retención por cohortes construido a partir de tus eventos de PostHog.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Session replay (repetición de sesión)</b><p>Una lista paginada de grabaciones recientes, con duración y persona, con un enlace directo al reproductor completo de PostHog.</p></div>
+  </div>
+  <div class="callout co-info"><div class="ct">ℹ️ Desconexión</div><p>Desconectar PostHog desde InsForge solo rompe el enlace entre ambas plataformas: tu proyecto de PostHog, sus eventos y sus grabaciones <strong>permanecen intactos</strong>.</p></div>
+</section>
+
+<!-- ==================== PAYMENTS / MESSAGING ==================== -->
+<section id="sec-payments" class="page">
+  <div class="sec-header"><div class="sec-icon">💳</div><div><span class="sec-num">Capítulo 24</span><h2>Payments y Messaging</h2></div></div>
+
+  <h3>Payments (pagos)</h3>
+  <div class="card">
+    <p><strong>¿Qué es y para qué sirve?</strong> InsForge Payments permite cobrar dentro de tu aplicación usando tu propia cuenta de <strong>Stripe</strong> o de <strong>Razorpay</strong>. Cada proveedor tiene su propio modelo de pago, así que la documentación los trata por separado en lugar de describir un flujo genérico único.</p>
+    <div class="callout co-warn"><div class="ct">⚠️ Fuente de verdad</div><p>Stripe o Razorpay siguen siendo la fuente de verdad de los cargos, las facturas, los reembolsos, las disputas y los impuestos. InsForge <strong>no es un procesador de pagos ni un «merchant of record»</strong> (comerciante registrado), y no sustituye al panel del proveedor.</p></div>
+    <p>Cada proveedor guarda sus propios conceptos en tablas específicas dentro del esquema <code class="inline">payments</code> de tu base de datos (por ejemplo <code class="inline">payments.stripe_products</code>, <code class="inline">payments.stripe_subscriptions</code>, <code class="inline">payments.razorpay_orders</code>), además de unas tablas compartidas:</p>
+    <ul>
+      <li><code class="inline">payments.provider_connections</code> — estado de configuración del proveedor.</li>
+      <li><code class="inline">payments.customer_mappings</code> — relación entre tu usuario y el cliente en el proveedor.</li>
+      <li><code class="inline">payments.webhook_events</code> — el registro de eventos de webhook ya verificados.</li>
+      <li><code class="inline">payments.transactions</code> — una proyección para el panel de InsForge, no el contrato de negocio real.</li>
+    </ul>
+  </div>
+
+  <h4>Regla de oro sobre la entrega del producto pagado (fulfillment)</h4>
+  <div class="callout co-err"><div class="ct">⛔ Regla de oro</div><p>La documentación insiste en que <strong>nunca hay que dar por completado un pago a partir de la URL de éxito de Stripe o del callback de Razorpay Checkout por sí solos</strong>, porque esas son solo señales de experiencia de usuario. La entrega real de lo comprado debe dispararse siempre desde <strong>eventos de webhook verificados</strong>, por ejemplo con un disparador SQL sobre <code class="inline">payments.webhook_events</code>:</p></div>
+<pre class="code">CREATE TRIGGER fulfill_from_payment_webhook
+  AFTER INSERT OR UPDATE ON payments.webhook_events
+  FOR EACH ROW
+  EXECUTE FUNCTION public.fulfill_payment_event();</pre>
+  <div class="callout co-warn"><div class="ct">⚠️ Orden de eventos</div><p>La documentación también avisa de que los distintos proveedores <strong>no garantizan el orden entre eventos</strong>, así que conviene resolver primero al usuario o cliente a partir del propio contenido del evento, y tratar las búsquedas en otras tablas como una alternativa de respaldo, no como algo que siempre estará ya disponible.</p></div>
+
+  <h3>Messaging (mensajería)</h3>
+  <div class="card">
+    <p><strong>¿Qué es y para qué sirve?</strong> InsForge Messaging envía <strong>notificaciones transaccionales</strong> desde tu proyecto: recibos, resúmenes periódicos, códigos de restablecimiento de contraseña, avisos... cualquier cosa para la que normalmente conectarías SendGrid, Postmark o Twilio a mano. El <strong>correo electrónico</strong> es el primer canal disponible; <strong>SMS y notificaciones push</strong> están en el mapa de ruta (roadmap) y compartirán la misma forma de API cuando lleguen.</p>
+    <div class="callout co-info"><div class="ct">ℹ️ Diferencia con Authentication</div><p>Si solo necesitas los correos propios de autenticación (enlaces mágicos, códigos de verificación, restablecimientos de contraseña), esos ya vienen resueltos dentro de Authentication; Messaging es para mensajes transaccionales más allá de la autenticación.</p></div>
+    <h4>Custom SMTP</h4>
+    <p>Puedes enviar a través del <strong>remitente gestionado de InsForge Cloud</strong> (que usa AWS SES por dentro) sin ninguna configuración, o conectar tu propio proveedor SMTP cuando necesites controlar la reputación de envío.</p>
+    <div class="callout co-err"><div class="ct">⛔ Muy importante si autoalojas InsForge</div><p>El remitente gestionado de InsForge Cloud <strong>solo está disponible para proyectos conectados a la nube</strong>. En una instancia autoalojada, debes configurar Custom SMTP <strong>antes de que se pueda enviar ningún correo</strong>, incluidos los propios correos de autenticación. InsForge impide activar la verificación de email obligatoria hasta que haya un proveedor disponible, y evita que desactives el único proveedor SMTP configurado mientras la verificación siga siendo obligatoria.</p></div>
+    <h4>Otras características</h4>
+    <ul>
+      <li><strong>Plantillas</strong>: eliges una por nombre y pasas variables; las cuatro plantillas de autenticación traen valores por defecto razonables.</li>
+      <li><strong>Seguimiento de entrega</strong>: eventos <code class="inline">accepted</code>, <code class="inline">delivered</code>, <code class="inline">bounced</code>, <code class="inline">complained</code> registrados por mensaje.</li>
+      <li><strong>Límites de envío</strong> configurables desde el panel para evitar que un bucle accidental dañe tu reputación de envío.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ==================== BRANCHING ==================== -->
+<section id="sec-branching" class="page">
+  <div class="sec-header"><div class="sec-icon">🌿</div><div><span class="sec-num">Capítulo 25</span><h2>Backend Branching</h2></div></div>
+
+  <h3>¿Qué es y para qué sirve?</h3>
+  <div class="card">
+    <p>Una <strong>rama de backend (branch)</strong> es un proyecto hijo, con su propia base de datos Postgres, su propia configuración de autenticación, su propio almacenamiento, sus propias funciones Edge, sus propias plantillas de correo, sus propios canales de tiempo real y sus propias programaciones. Sirve para probar cambios arriesgados —migraciones grandes, reescrituras de políticas de RLS, cambios de proveedor OAuth, refactorizaciones de funciones— sobre una copia aislada, y después fusionar (merge) esos cambios de vuelta al proyecto padre, o descartar la rama entera si algo sale mal. <strong>Disponible desde la versión 2.1.0 de InsForge OSS en adelante.</strong></p>
+  </div>
+
+  <h3>Cómo funciona por dentro</h3>
+  <ul>
+    <li>Cada rama corre en su propia instancia (según la documentación, una instancia EC2 en InsForge Cloud), restaurada a partir del proyecto padre en el momento de crearla.</li>
+    <li>Al fusionar, <code class="inline">branch merge</code> ejecuta una <strong>comparación a tres bandas (three-way diff)</strong> contra el estado del padre en el momento en que se creó la rama.</li>
+    <li>La rama <strong>comparte el <code class="inline">JWT_SECRET</code> del padre</strong>, pero recibe su propia <code class="inline">API_KEY</code>.</li>
+    <li>Los servicios de Compute y los despliegues de frontend <strong>no se ramifican</strong>.</li>
+  </ul>
+
+  <h3>Ejemplo práctico paso a paso</h3>
+  <ol class="steps">
+    <li><b class="t">Crear una rama, en modo full (esquema y datos) o schema-only (más rápida, tablas de usuario vacías)</b>
+<pre class="code">npx @insforge/cli branch create feat-billing --mode full
+npx @insforge/cli branch list</pre></li>
+    <li><b class="t">Antes de fusionar, previsualizar el SQL que se aplicaría</b>
+<pre class="code">npx @insforge/cli branch merge feat-billing --dry-run --save-sql ./preview.sql</pre></li>
+    <li><b class="t">Fusionar de verdad, cuando estés conforme</b>
+<pre class="code">npx @insforge/cli branch merge feat-billing</pre></li>
+    <li><b class="t">Si algo sale mal, volver al estado del momento de creación, o borrar la rama por completo</b>
+<pre class="code">npx @insforge/cli branch reset feat-billing
+npx @insforge/cli branch delete feat-billing</pre></li>
+  </ol>
+
+  <h3>Cuándo usarla y cuándo no</h3>
+  <div class="grid g2">
+    <div class="callout co-ex" style="margin:0"><div class="ct">✅ Úsala para</div><p>Migraciones de esquema arriesgadas, reescrituras de RLS, cambios de proveedor OAuth y refactorizaciones de funciones Edge.</p></div>
+    <div class="callout co-warn" style="margin:0"><div class="ct">⚠️ Sáltatela para</div><p>Cambios triviales y para rellenados de datos (los datos de usuario no se fusionan automáticamente).</p></div>
+  </div>
+
+  <h3>Límites documentados</h3>
+  <div class="callout co-warn"><div class="ct">⚠️ Límites</div>
+  <p>• Las fusiones se bloquean si hay conflictos: hay que resolverlos en la rama o reiniciarla e intentarlo de nuevo.</p>
+  <p>• Cuotas: <strong>3 proyectos padre por organización, 2 ramas activas por proyecto padre</strong>, sin anidamiento (no se puede crear una rama de una rama).</p>
+  <p>• Una fusión exitosa <strong>no borra automáticamente la rama</strong>.</p></div>
+</section>
+
+<!-- ==================== SELF-HOSTING ==================== -->
+<section id="sec-selfhost" class="page">
+  <div class="sec-header"><div class="sec-icon">🏠</div><div><span class="sec-num">Capítulo 26</span><h2>Self-hosting</h2></div></div>
+  <p class="sec-lead">Llegamos a una de las decisiones más importantes que tomarás con InsForge: ¿nube o servidor propio?</p>
+
+  <h3>Cloud vs. Self-Hosted: la diferencia</h3>
+  <div class="grid g2">
+    <div class="card">
+      <h4>☁️ InsForge Cloud</h4>
+      <p>Es la versión gestionada por la empresa InsForge. Te registras en <code class="inline">insforge.dev</code>, creas un proyecto y en unos tres segundos tienes un backend funcionando. InsForge se encarga de los servidores, las copias de seguridad automáticas, las actualizaciones y la disponibilidad. Es el camino <strong>recomendado para empezar</strong> y para la mayoría de los proyectos, y es <strong>imprescindible</strong> si quieres usar Sites (los despliegues automáticos a Vercel) o el remitente de correo gestionado sin configurar nada.</p>
+    </div>
+    <div class="card">
+      <h4>🏠 InsForge Self-Hosted (autoalojado)</h4>
+      <p>Significa instalar tú mismo el software de InsForge —que es de código abierto— en tu propio servidor, normalmente con Docker. Tú controlas por completo dónde viven tus datos, qué versión ejecutas y cómo lo aseguras, pero también asumes tú la responsabilidad de mantenerlo: copias de seguridad, actualizaciones, seguridad del servidor, certificados TLS, etc. Algunas piezas exigen configuración extra en modo autoalojado que en la nube viene resuelta de fábrica: el remitente de correo (Custom SMTP), el proveedor de Compute (Docker o Fly.io) y el almacenamiento S3 (local por defecto, o un proveedor S3 externo).</p>
+    </div>
+  </div>
+  <div class="callout co-warn"><div class="ct">⚠️ No mezcles</div><p>No mezcles los procedimientos de ambas modalidades. Autoalojar InsForge es instalar la plataforma en tu servidor; Sites es publicar la aplicación que tú construyes usando InsForge (nube o autoalojado) como backend. Son conceptos distintos, aunque el nombre «deploy» (desplegar) aparezca en los dos contextos.</p></div>
+
+  <h3>Requisitos previos para autoalojar</h3>
+  <p>Según la guía oficial de despliegue en un VPS (servidor privado virtual):</p>
+  <ul>
+    <li>Un servidor con <strong>Ubuntu 22.04 LTS o 24.04 LTS</strong> (Debian 12 también funciona), con al menos <strong>2 vCPU / 2 GB de RAM</strong> (se recomiendan 4 vCPU / 4 GB o más para producción con varios usuarios), y <strong>20 GB de disco SSD</strong> como mínimo (40 GB o más recomendado).</li>
+    <li>Acceso root o con permisos de administrador (<code class="inline">sudo</code>).</li>
+    <li>Un nombre de dominio propio (recomendado para producción).</li>
+    <li>Nociones básicas de la línea de comandos de Linux y de SSH (el protocolo para conectarte de forma segura a un servidor remoto).</li>
+  </ul>
+  <p>InsForge se compone de <strong>cuatro servicios</strong> que corren juntos:</p>
+  <div class="tblwrap"><table>
+    <tr><th>Servicio</th><th>Función</th><th>Puerto interno</th></tr>
+    <tr><td>PostgreSQL</td><td>La base de datos</td><td>5432</td></tr>
+    <tr><td>PostgREST</td><td>La capa que genera la API REST automáticamente</td><td>3000 (mapeado normalmente al 5430)</td></tr>
+    <tr><td>InsForge</td><td>El backend en Node.js más el panel de control</td><td>7130</td></tr>
+    <tr><td>Deno</td><td>El motor que ejecuta las Edge Functions</td><td>7133</td></tr>
+  </table></div>
+
+  <h3>Instalación paso a paso (resumen del proceso oficial)</h3>
+  <ol class="steps">
+    <li><b class="t">Conéctate por SSH a tu servidor y actualiza el sistema</b>
+<pre class="code">ssh root@tu-servidor
+apt update &amp;&amp; apt upgrade -y</pre></li>
+    <li><b class="t">Crea un usuario dedicado, sin privilegios de root directos</b>
+      <p>Para ejecutar los servicios (nunca ejecutes servicios de producción como root):</p>
+<pre class="code">adduser deploy
+usermod -aG sudo deploy
+su - deploy</pre></li>
+    <li><b class="t">Instala Docker y Docker Compose</b><p>Siguiendo el procedimiento oficial de Docker para Ubuntu, y añade tu usuario al grupo <code class="inline">docker</code>.</p></li>
+    <li><b class="t">Descarga y prepara el proyecto con el script oficial de instalación</b>
+      <p>Genera automáticamente <code class="inline">JWT_SECRET</code>, <code class="inline">ENCRYPTION_KEY</code>, <code class="inline">ROOT_ADMIN_PASSWORD</code> y <code class="inline">POSTGRES_PASSWORD</code> dentro de un archivo <code class="inline">.env</code>, sin arrancar nada todavía:</p>
+<pre class="code">curl -fsSL https://raw.githubusercontent.com/InsForge/InsForge/main/deploy/setup.sh | sh -s ~/insforge</pre>
+      <p>Si prefieres no ejecutar un script descargado directamente, puedes descargarlo primero, leerlo, y ejecutarlo después:</p>
+<pre class="code">curl -fsSL https://raw.githubusercontent.com/InsForge/InsForge/main/deploy/setup.sh -o setup.sh
+less setup.sh
+sh setup.sh ~/insforge</pre></li>
+    <li><b class="t">Arranca los servicios</b>
+<pre class="code">cd ~/insforge
+docker compose up -d</pre></li>
+    <li><b class="t">Comprueba que los cuatro contenedores están sanos</b>
+<pre class="code">docker compose ps</pre>
+      <p>Deberías ver algo parecido a:</p>
+<pre class="code">NAME            SERVICE     STATUS
+insforge        insforge    running
+postgres        postgres    healthy
+postgrest       postgrest   healthy
+deno            deno        running</pre></li>
+    <li><b class="t">Comprueba el endpoint de salud</b>
+<pre class="code">curl http://localhost:7130/api/health</pre></li>
+  </ol>
+  <div class="callout co-ex"><div class="ct">✅ ¿Qué acaba de ocurrir?</div><p>Ya tienes un backend de InsForge completo corriendo en tu propio servidor. Todavía habla solo por HTTP en el puerto 7130 y no tiene certificado de seguridad (HTTPS); los siguientes pasos —fuera del alcance de este resumen, pero sí de la sección de seguridad— consisten en configurar un dominio, un proxy inverso (Nginx o Caddy) y un certificado TLS gratuito con Certbot o de forma automática con Caddy.</p></div>
+
+  <h3>Variables de entorno imprescindibles antes de producción</h3>
+  <p>La documentación marca estas variables como críticas y obliga a cambiarlas de sus valores por defecto antes de exponer el servidor a internet:</p>
+<pre class="code">JWT_SECRET=&lt;salida de: openssl rand -base64 32&gt;
+ENCRYPTION_KEY=&lt;salida de: openssl rand -base64 24&gt;
+ROOT_ADMIN_USERNAME=admin
+ROOT_ADMIN_PASSWORD=&lt;contraseña fuerte y única&gt;
+API_BASE_URL=https://insforge.tudominio.com
+VITE_API_BASE_URL=https://insforge.tudominio.com</pre>
+  <div class="callout co-err"><div class="ct">⛔ Advertencia oficial muy importante</div><p><code class="inline">JWT_SECRET</code> y <code class="inline">ENCRYPTION_KEY</code> deben ser <strong>valores distintos</strong>. Si no defines <code class="inline">ENCRYPTION_KEY</code>, InsForge usa <code class="inline">JWT_SECRET</code> como valor de respaldo — pero si más adelante rotas (cambias) <code class="inline">JWT_SECRET</code>, eso <strong>corrompe de forma permanente todos los secretos ya guardados</strong> (claves de API, tokens OAuth, etc.).</p></div>
+
+  <h3>Cómo elegir entre Docker, Fly.io y demás proveedores de Compute</h3>
+  <p>Ya lo vimos en la sección Custom Compute: en autoalojamiento tú decides si Compute corre sobre el mismo Docker que ya usas para InsForge, o sobre Fly.io con tu propia cuenta.</p>
+
+  <h3>Actualizar y volver atrás (rollback)</h3>
+  <p>Antes de actualizar, <strong>haz siempre una copia de seguridad</strong>. InsForge incluye un script para ello:</p>
+<pre class="code">cd ~/insforge
+./deploy/backup.sh</pre>
+  <p>Para actualizar: trae los cambios del repositorio, revisa las diferencias antes de fusionar, descarga las imágenes nuevas y reinicia:</p>
+<pre class="code">cd ~/insforge
+git fetch origin main
+git diff HEAD origin/main -- deploy functions .env.example
+git merge --ff-only origin/main
+sh deploy/setup.sh .
+docker compose pull
+docker compose down
+docker compose up -d
+docker compose logs -f --tail=50</pre>
+  <p>Si una actualización causa problemas, la documentación describe un procedimiento de <strong>rollback (volver atrás)</strong> que consiste en fijar la imagen de InsForge a una versión anterior conocida mediante un archivo <code class="inline">pin.yml</code> adicional en la variable <code class="inline">COMPOSE_FILE</code>, y —solo si la actualización incluyó una migración de base de datos problemática— restaurar la base de datos desde la copia de seguridad previa.</p>
+
+  <h3>Backups automáticos en autoalojamiento</h3>
+<pre class="code">crontab -e
+
+0 3 * * * /home/deploy/insforge/deploy/backup.sh &gt;&gt; /home/deploy/insforge/backups/cron.log 2&gt;&amp;1</pre>
+  <p>Por defecto, las copias se guardan en <code class="inline">~/insforge/backups/</code> y se eliminan las de más de 14 días; puedes cambiar ese periodo con <code class="inline">RETENTION_DAYS=30 ./deploy/backup.sh</code>. Para máxima seguridad, la documentación recomienda copiar también esas copias a un almacenamiento externo (por ejemplo, un cubo S3 en otra región, o un servidor remoto por <code class="inline">rsync</code>).</p>
+
+  <h3>Ejecutar varios proyectos autoalojados en el mismo servidor</h3>
+  <div class="callout co-warn"><div class="ct">⚠️ Multi-proyecto</div><p>Cada proyecto necesita su propia carpeta y su propio <code class="inline">COMPOSE_PROJECT_NAME</code> en el <code class="inline">.env</code>, además de puertos distintos si conviven en el mismo servidor, ya que dos carpetas que comparten el mismo <code class="inline">COMPOSE_PROJECT_NAME</code> acaban compartiendo contenedores (el segundo <code class="inline">docker compose up -d</code> «adopta» los del primero).</p></div>
+</section>
+
+<!-- ==================== SEGURIDAD ==================== -->
+<section id="sec-seguridad" class="page">
+  <div class="sec-header"><div class="sec-icon">🛡️</div><div><span class="sec-num">Capítulo 27</span><h2>Seguridad y buenas prácticas</h2></div></div>
+  <p class="sec-lead">Reunimos aquí, en un solo sitio, las recomendaciones de seguridad que hemos ido viendo repartidas por la documentación oficial.</p>
+
+  <h3>En cualquier proyecto (nube o autoalojado)</h3>
+  <div class="grid g2">
+    <div class="pcard" style="--pc:var(--accent)"><b>Diseña siempre pensando en RLS</b><p>Las tablas nuevas llevan RLS activado por defecto; añade políticas explícitas para cada caso de uso en lugar de desactivar la seguridad por fila para «que funcione rápido».</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Usa el Backend Advisor con regularidad</b><p><code class="inline">npx @insforge/cli diagnose advisor</code> detecta, entre otras cosas, políticas de RLS demasiado permisivas que exponen datos a usuarios anónimos, y te da directamente el SQL de remediación.</p></div>
+    <div class="pcard" style="--pc:var(--amber)"><b>Separa claves públicas de claves de administrador</b><p>La clave «anon» (pública, sujeta a RLS) puede vivir en el navegador; la clave de API (<code class="inline">ik_...</code>, administrador, se salta RLS) nunca debe salir de tu servidor.</p></div>
+    <div class="pcard" style="--pc:var(--purple)"><b>Prueba en ramas</b><p>Prueba los cambios arriesgados en una rama de backend antes de aplicarlos al proyecto real (Backend Branching).</p></div>
+    <div class="pcard" style="--pc:var(--accent)"><b>Versiona la configuración</b><p>Versiona la configuración sensible con <code class="inline">insforge.toml</code> (Config as code) en lugar de cambiarla a mano desde el panel sin dejar rastro.</p></div>
+    <div class="pcard" style="--pc:var(--green)"><b>Copias manuales</b><p>Haz copias de seguridad manuales antes de cualquier cambio arriesgado, aunque tengas copias automáticas activas.</p></div>
+  </div>
+
+  <h3>Específico de autoalojamiento (resumen de la guía oficial de VPS)</h3>
+  <ul>
+    <li><strong>Nunca ejecutes los servicios como root.</strong> Crea un usuario dedicado sin privilegios directos de administrador.</li>
+    <li><strong>Cierra al público los puertos internos.</strong> Solo deberían estar abiertos al exterior los puertos 22 (SSH, idealmente restringido a tu propia IP), 80 (HTTP, para la redirección a HTTPS) y 443 (HTTPS). Los puertos 5432 (Postgres), 5430 (PostgREST), 7130 (InsForge) y 7133 (Deno) son solo para comunicación interna entre contenedores y nunca deben quedar expuestos a internet.</li>
+    <li><strong>Ojo con Docker y el cortafuegos (firewall).</strong> Docker manipula las reglas de <code class="inline">iptables</code> directamente, lo que puede saltarse las reglas de UFW (el cortafuegos habitual de Ubuntu). La solución recomendada es anteponer <code class="inline">127.0.0.1:</code> a cada puerto publicado en tu <code class="inline">docker-compose.yml</code>, para que ese puerto solo sea accesible desde el propio servidor.</li>
+    <li><strong>Autentícate por clave SSH</strong>, no por contraseña, y desactiva el inicio de sesión directo como root.</li>
+    <li><strong>Instala Fail2Ban</strong> para bloquear automáticamente direcciones IP que muestren comportamiento de ataque por fuerza bruta contra SSH.</li>
+    <li><strong>Restringe los orígenes CORS en producción.</strong> Por defecto, el backend refleja cualquier origen (<code class="inline">Origin</code>) en sus respuestas, lo cual es cómodo en desarrollo local pero demasiado permisivo en producción; limita los orígenes permitidos a los dominios que realmente sirves.</li>
+    <li><strong>Gestiona bien los secretos:</strong> guarda el <code class="inline">.env</code> con permisos restringidos (<code class="inline">chmod 600</code>), usa valores distintos para <code class="inline">JWT_SECRET</code> y <code class="inline">ENCRYPTION_KEY</code>, genera secretos con <code class="inline">openssl rand -base64 32</code>, nunca subas el <code class="inline">.env</code> a Git, y no reutilices el mismo secreto para varias variables.</li>
+    <li><strong>Activa HTTPS siempre</strong>, con Certbot (Nginx) o con Caddy (que gestiona los certificados de Let's Encrypt de forma automática).</li>
+  </ul>
+</section>
+
+<!-- ==================== EJEMPLO COMPLETO ==================== -->
+<section id="sec-ejemplo" class="page">
+  <div class="sec-header"><div class="sec-icon">🧪</div><div><span class="sec-num">Capítulo 28</span><h2>Ejemplo completo de principio a fin</h2></div></div>
+  <p class="sec-lead">Vamos a construir, siguiendo fielmente el ejemplo oficial de la guía de Next.js (<code class="inline">docs.insforge.dev/examples/framework-guides/nextjs</code>), una pequeña aplicación real de principio a fin: una lista de deportes guardada en una base de datos real, mostrada en una página web.</p>
+
+  <ol class="steps">
+    <li><b class="t">Paso 1: crear el proyecto de InsForge</b>
+      <p>Entra en <code class="inline">insforge.dev</code> y crea un nuevo proyecto (como en la sección Primeros pasos).</p></li>
+    <li><b class="t">Paso 2: conectar InsForge a tu editor</b>
+      <p>Dos piezas, como ya vimos:</p>
+      <ul>
+        <li><strong>Enlace por CLI:</strong> <code class="inline">npx @insforge/cli link --project-id &lt;tu-id-de-proyecto&gt;</code>.</li>
+        <li><strong>Configuración MCP:</strong> siguiendo la guía específica de tu editor (sección MCP).</li>
+      </ul>
+      <p>Con ambas conectadas, tu agente de IA puede leer esquemas, ejecutar consultas y desplegar código directamente desde tu editor.</p></li>
+    <li><b class="t">Paso 3: construir la aplicación con un único mensaje al agente</b>
+      <p>Este es el mensaje exacto que propone la documentación oficial, pensado para pegarlo en Cursor, Claude Code o tu asistente de IA preferido:</p>
+<pre class="code">Create a new Next.js app with TypeScript and Tailwind CSS 3.4.
+Install the InsForge SDK and set up the client configuration.
+In my InsForge database, create a sports table with id and name columns.
+Add sample data: basketball, soccer, and tennis. Make it publicly readable.
+Create a page at /sports that fetches and displays all sports from the database.</pre>
+      <p>(En castellano: «Crea una nueva app de Next.js con TypeScript y Tailwind CSS 3.4. Instala el SDK de InsForge y configura el cliente. En mi base de datos de InsForge, crea una tabla <code class="inline">sports</code> con columnas <code class="inline">id</code> y <code class="inline">name</code>. Añade datos de ejemplo: basketball, soccer y tennis. Hazla legible públicamente. Crea una página en <code class="inline">/sports</code> que traiga y muestre todos los deportes de la base de datos.»)</p>
+      <p>Tu asistente de IA genera la aplicación completa, incluyendo la configuración de la base de datos y la interfaz. No hace falta escribir el código a mano: el agente lo crea todo.</p></li>
+    <li><b class="t">Paso 4: qué genera el agente (para que entiendas qué está pasando por dentro)</b>
+      <p>El cliente de InsForge, en <code class="inline">lib/insforge.ts</code>:</p>
+<pre class="code">import { createClient } from '@insforge/sdk';
+
+export const insforge = createClient({
+  baseUrl: 'https://tu-proyecto.us-east.insforge.app',
+  anonKey: 'tu-clave-anon',
+});</pre>
+      <p>La página de deportes, en <code class="inline">app/sports/page.tsx</code>:</p>
+<pre class="code">import { insforge } from '@/lib/insforge';
+
+export default async function SportsPage() {
+  const { data: sports, error } = await insforge.database
+    .from('sports')
+    .select();
+
+  if (error) {
+    return (
+      &lt;div className="min-h-screen flex items-center justify-center"&gt;
+        &lt;div className="text-red-600"&gt;
+          &lt;h1 className="text-2xl font-bold mb-2"&gt;Error&lt;/h1&gt;
+          &lt;p&gt;{error.message}&lt;/p&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    );
+  }
+
+  return (
+    &lt;div className="min-h-screen p-8"&gt;
+      &lt;div className="max-w-4xl mx-auto"&gt;
+        &lt;h1 className="text-4xl font-bold mb-8"&gt;Sports&lt;/h1&gt;
+        {sports &amp;&amp; sports.length &gt; 0 ? (
+          &lt;div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"&gt;
+            {sports.map((sport: { id: string; name: string }) =&gt; (
+              &lt;div
+                key={sport.id}
+                className="p-6 bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
+              &gt;
+                &lt;h2 className="text-xl font-semibold text-gray-800 capitalize"&gt;
+                  {sport.name}
+                &lt;/h2&gt;
+                &lt;p className="text-sm text-gray-500 mt-2"&gt;ID: {sport.id}&lt;/p&gt;
+              &lt;/div&gt;
+            ))}
+          &lt;/div&gt;
+        ) : (
+          &lt;p className="text-gray-600"&gt;No sports found.&lt;/p&gt;
+        )}
+      &lt;/div&gt;
+    &lt;/div&gt;
+  );
+}</pre></li>
+    <li><b class="t">Paso 5: probar la aplicación</b>
+<pre class="code">npm run dev</pre>
+      <p>Abre <code class="inline">http://localhost:3000/sports</code> en tu navegador. Deberías ver una tarjeta por cada deporte guardado en la base de datos.</p></li>
+    <li><b class="t">Paso 6: desplegarla (Sites)</b>
+      <p>Cuando estés conforme con el resultado, publícala con la CLI:</p>
+<pre class="code">npx @insforge/cli deployments deploy ./frontend</pre></li>
+  </ol>
+
+  <h3>Extender el ejemplo: prompts adicionales sugeridos por la documentación oficial</h3>
+  <p>Una vez tienes la base funcionando, la propia guía de InsForge sugiere estos siguientes pasos, cada uno con un único mensaje a tu agente:</p>
+  <ul>
+    <li><em>Add a form to create new sports and save them to the database.</em></li>
+    <li><em>Include validation and error handling.</em></li>
+    <li><em>Add user authentication with sign up and login pages.</em></li>
+    <li><em>Only allow authenticated users to add new sports.</em></li>
+    <li><em>Add a favorites feature where users can mark their favorite sports.</em></li>
+    <li><em>Store favorites in a user_favorites table with user_id and sport_id.</em></li>
+    <li><em>Add images to each sport using InsForge Storage.</em></li>
+    <li><em>Allow users to upload sport images and display them in the grid.</em></li>
+    <li><em>Add an AI chat feature that can answer questions about sports.</em></li>
+    <li><em>Use InsForge AI with streaming responses.</em></li>
+  </ul>
+  <div class="callout co-ex"><div class="ct">✅ Recorrido completo</div><p>Con esto has recorrido, en un único ejemplo, prácticamente todo el mapa de InsForge: proyecto, base de datos, autenticación, almacenamiento, IA y despliegue.</p></div>
+</section>
+
+<!-- ==================== FAQ ==================== -->
+<section id="sec-faq" class="page">
+  <div class="sec-header"><div class="sec-icon">❓</div><div><span class="sec-num">Capítulo 29</span><h2>Problemas frecuentes</h2></div></div>
+  <p class="sec-lead">Recogemos aquí, resumidas, algunas de las preguntas frecuentes documentadas oficialmente que más suelen bloquear a quien empieza. Pulsa cada pregunta para desplegar la respuesta.</p>
+
+  <details class="acc"><summary>¿Leer o escribir en la base de datos es una Edge Function?</summary><div class="acc-body"><p>No. Cuando lees o escribes una tabla, no se ejecuta ninguna función: es una llamada automática a la API REST generada por InsForge. Regla rápida: ¿solo mueves datos dentro y fuera de una tabla? Eso es la <strong>base de datos</strong>. ¿Escribes lógica propia que se ejecuta y termina? Eso es una <strong>Edge Function</strong>. ¿Necesitas algo funcionando todo el rato? Eso es <strong>Custom Compute</strong>.</p></div></details>
+
+  <details class="acc"><summary>¿Cómo consulto una tabla que no está en el esquema public?</summary><div class="acc-body"><p>Ver el final de la sección Database: hay que dar permisos explícitos con <code class="inline">GRANT</code> a los roles <code class="inline">anon</code> y <code class="inline">authenticated</code> y añadir RLS, además de usar <code class="inline">.schema('nombre')</code> en el SDK o las cabeceras <code class="inline">Accept-Profile</code> / <code class="inline">Content-Profile</code> en la API REST.</p></div></details>
+
+  <details class="acc"><summary>¿Existe una clave tipo service_role como en otras plataformas?</summary><div class="acc-body"><p>No con ese nombre. El equivalente en InsForge es la <strong>API Key del proyecto</strong> (empieza por <code class="inline">ik_</code>), la clave completa de administrador que se salta RLS. Se diferencia de la clave «anon», que es pública y respeta RLS.</p></div></details>
+
+  <details class="acc"><summary>¿Por qué se pausó mi proyecto?</summary><div class="acc-body"><p>Solo ocurre en el <strong>plan gratuito</strong>, por dos motivos: inactividad (7 días sin peticiones; cualquier petición reinicia el contador) o haber superado los límites de uso del plan gratuito. En ambos casos, <strong>los datos permanecen intactos</strong>.</p></div></details>
+
+  <details class="acc"><summary>Mi proyecto está pausado, ¿cómo lo reactivo?</summary><div class="acc-body"><p>Desde el panel, pulsando <strong>Restore Project</strong>. Un proyecto gratuito se puede restaurar hasta <strong>30 días</strong> después de pausarse; pasado ese plazo queda archivado (aún se puede descargar la copia de seguridad y los archivos, sin pérdida de datos). Si la pausa fue por exceder los límites de uso, hace falta pasar al <strong>plan Pro</strong> para restaurarlo.</p></div></details>
+
+  <details class="acc"><summary>¿Cómo entro en la CLI sin navegador (en un servidor remoto o en integración continua)?</summary><div class="acc-body"><p>Usando una clave de API de usuario en lugar del flujo interactivo: <code class="inline">npx @insforge/cli login --user-api-key &lt;tu-clave&gt;</code>. Esa clave se genera desde <strong>Perfil → API Keys</strong> en el panel, y da acceso completo a tu cuenta, así que hay que guardarla como un secreto y rotarla si se filtra.</p></div></details>
+
+  <details class="acc"><summary>¿Cómo obtengo la cadena de conexión directa a Postgres?</summary><div class="acc-body"><p><code class="inline">npx @insforge/cli db connection-string</code> (solo para proyectos en la nube). Esa cadena se conecta como el rol <code class="inline">postgres</code>, con privilegios completos y sin pasar por RLS, así que hay que tratarla como un secreto y usarla solo del lado del servidor.</p></div></details>
+
+  <details class="acc"><summary>¿Cómo importo una base de datos Postgres que ya tenía?</summary><div class="acc-body"><p>Con las herramientas estándar de PostgreSQL (<code class="inline">pg_dump</code>, <code class="inline">pg_restore</code>, <code class="inline">psql</code>) contra la cadena de conexión de tu proyecto InsForge; no hace falta ningún comando propio de InsForge. Eso sí: una restauración en bruto no añade automáticamente los permisos ni las políticas de RLS que gestiona InsForge, así que las tablas importadas no serán accesibles por la API hasta que las concedas y protejas tú mismo.</p></div></details>
+
+  <details class="acc"><summary>¿Qué es FLY_API_TOKEN?</summary><div class="acc-body"><p>Solo hace falta si autoalojas InsForge y quieres usar Custom Compute sobre Fly.io (sección Custom Compute); en InsForge Cloud nunca hay que tocarlo.</p></div></details>
+</section>
+
+<!-- ==================== NIVELES ==================== -->
+<section id="sec-niveles" class="page">
+  <div class="sec-header"><div class="sec-icon">🎓</div><div><span class="sec-num">Capítulos 30 · 31</span><h2>De principiante a profesional — Resumen final</h2></div></div>
+  <p class="sec-lead">Recapitulando todo el recorrido de esta guía como una progresión de niveles.</p>
+
+  <div class="level" style="--lc:var(--muted)"><b class="lv">NIVEL 0 — Principiante absoluto</b><p>Entiendes qué es un backend y por qué hace falta uno. Sabes qué es InsForge y en qué se diferencia de otras plataformas. Te has creado una cuenta en <code class="inline">insforge.dev</code>.</p></div>
+  <div class="level" style="--lc:var(--green)"><b class="lv">NIVEL 1 — Usuario básico</b><p>Has creado tu primer proyecto, has conectado la CLI y (opcionalmente) el MCP a tu editor. Has verificado la conexión enviando el mensaje de prueba a tu agente. Entiendes la diferencia entre CLI, MCP y Skills.</p></div>
+  <div class="level" style="--lc:var(--accent)"><b class="lv">NIVEL 2 — Usuario intermedio</b><p>Sabes crear tablas mediante migraciones, entender y aplicar RLS, gestionar autenticación de usuarios, subir y descargar archivos con Storage, y escribir una Edge Function sencilla. Has completado, al menos una vez, el ejemplo de principio a fin.</p></div>
+  <div class="level" style="--lc:var(--amber)"><b class="lv">NIVEL 3 — Usuario avanzado</b><p>Usas Realtime para actualizar tu interfaz sin recargar, conectas el Model Gateway para añadir funciones de IA a tu aplicación, programas tareas con Schedules, despliegas tu frontend con Sites, y sabes moverte por la API REST y el SDK con soltura, incluyendo la clave de administrador cuando corresponde.</p></div>
+  <div class="level" style="--lc:var(--purple)"><b class="lv">NIVEL 4 — Profesional</b><p>Diseñas tu configuración con <code class="inline">insforge.toml</code> versionado en Git, pruebas cambios arriesgados en ramas de backend antes de tocar producción, usas el Backend Advisor y <code class="inline">diagnose</code> de forma habitual como parte de tu flujo de trabajo, sabes cuándo tu proyecto necesita Custom Compute en lugar de una Edge Function, integras Payments con una lógica de entrega basada en webhooks verificados, y —si tu caso lo exige— sabes desplegar y asegurar tu propia instancia autoalojada de InsForge en un servidor, siguiendo la guía oficial de seguridad paso a paso.</p></div>
+
+  <div class="callout co-info"><div class="ct">ℹ️ El hilo conductor</div><p>El hilo conductor de todos estos niveles es el mismo: en InsForge, cada vez que aprendes a hacer algo «a mano» (crear una tabla, cambiar una configuración, desplegar código), también estás aprendiendo exactamente lo que tu agente de IA necesita para poder hacerlo por ti. <strong>Cuanto mejor entiendas tú el backend, mejor podrás dirigir —y supervisar— a un agente que lo opere en tu nombre.</strong></p></div>
+
+  <h3>Resumen final</h3>
+  <div class="card">
+    <p>InsForge es una plataforma de backend de código abierto que reúne, bajo un mismo techo, base de datos Postgres, autenticación, almacenamiento de archivos, tiempo real, funciones en la nube, una puerta de enlace a modelos de IA, publicación de sitios, mensajería, pagos y contenedores de larga duración. Su rasgo distintivo, frente a alternativas como Supabase o Firebase, es que está diseñada desde el principio para que un agente de inteligencia artificial —no solo una persona haciendo clic en un panel— pueda operar todo el backend de forma autónoma, a través de una CLI, un servidor MCP y unas Skills que le enseñan las convenciones del proyecto.</p>
+    <p>A lo largo de esta guía hemos recorrido, con ejemplos reales y comandos exactos tomados de la documentación oficial, cada producto de InsForge (base de datos con migraciones, RLS y pgvector; autenticación; almacenamiento compatible con S3; funciones Edge con programaciones tipo cron; el Model Gateway para IA; tiempo real; despliegue de sitios), las herramientas pensadas específicamente para agentes (el arnés de la CLI, el diagnóstico y asesor de seguridad, la configuración como código y las ramas de backend), los SDKs y la API REST, y las dos formas de alojar InsForge: en la nube gestionada, o en tu propio servidor siguiendo la guía oficial de seguridad.</p>
+    <p>Con esto tienes tanto el <strong>mapa completo de la plataforma</strong> como el <strong>detalle práctico</strong> necesario para empezar a construir aplicaciones reales sobre InsForge, ya sea escribiendo tú el código o dirigiendo a un agente de IA para que lo haga.</p>
+  </div>
+</section>
+
+<!-- ==================== CHULETA ==================== -->
+<section id="sec-chuleta" class="page">
+  <div class="sec-header"><div class="sec-icon">📋</div><div><span class="sec-num">Capítulo 32</span><h2>Chuleta rápida</h2></div></div>
+  <p class="sec-lead">Todos los comandos esenciales de InsForge en un solo sitio, agrupados por área.</p>
+
+  <h3>Conexión y proyecto</h3>
+<pre class="code">npx @insforge/cli login                          # iniciar sesión
+npx @insforge/cli link --project-id &lt;id&gt;          # enlazar la carpeta actual a un proyecto
+npx @insforge/cli whoami                          # ver la cuenta activa
+npx @insforge/cli current                         # ver el proyecto enlazado
+npx @insforge/cli list                            # listar tus proyectos
+npx @insforge/cli --json metadata                 # leer el estado completo del backend</pre>
+
+  <h3>Base de datos y migraciones</h3>
+<pre class="code">npx @insforge/cli db migrations new &lt;nombre&gt;       # crear una migración nueva
+npx @insforge/cli db migrations up --all           # aplicar migraciones pendientes
+npx @insforge/cli db migrations list               # ver el historial de migraciones
+npx @insforge/cli db migrations fetch              # traer el historial remoto (proyectos existentes)
+npx @insforge/cli db query "&lt;SQL&gt;"                 # ejecutar SQL (dentro de una transacción)
+npx @insforge/cli db query --unrestricted "&lt;SQL&gt;"  # ejecutar SQL sin transacción (para comandos no transaccionales)
+npx @insforge/cli db connection-string             # obtener la cadena de conexión Postgres (solo nube)</pre>
+
+  <h3>Configuración como código</h3>
+<pre class="code">npx @insforge/cli config export                    # generar insforge.toml a partir del proyecto real
+npx @insforge/cli config plan                       # ver qué cambiaría
+npx @insforge/cli config apply                      # aplicar el cambio
+npx @insforge/cli config apply --dry-run             # solo mostrar el plan
+npx @insforge/cli config apply --auto-approve --json # aplicar sin confirmación (para CI)</pre>
+
+  <h3>Ramas de backend</h3>
+<pre class="code">npx @insforge/cli branch create &lt;nombre&gt; --mode full         # crear rama (con datos)
+npx @insforge/cli branch create &lt;nombre&gt; --mode schema-only  # crear rama (solo esquema)
+npx @insforge/cli branch list                                 # listar ramas
+npx @insforge/cli branch merge &lt;nombre&gt; --dry-run --save-sql ./preview.sql  # previsualizar fusión
+npx @insforge/cli branch merge &lt;nombre&gt;                        # fusionar
+npx @insforge/cli branch reset &lt;nombre&gt;                        # volver al estado de creación
+npx @insforge/cli branch delete &lt;nombre&gt;                       # borrar la rama</pre>
+
+  <h3>Diagnóstico</h3>
+<pre class="code">npx @insforge/cli diagnose                          # informe completo
+npx @insforge/cli diagnose --json                   # informe completo, en JSON
+npx @insforge/cli diagnose advisor                  # solo el asesor de seguridad/rendimiento
+npx @insforge/cli diagnose db                        # solo salud de la base de datos
+npx @insforge/cli diagnose metrics                   # solo métricas de la instancia
+npx @insforge/cli diagnose logs                       # solo registros de error
+npx @insforge/cli diagnose --ai "&lt;pregunta&gt;"          # interpretación en lenguaje natural
+npx @insforge/cli logs function.logs                  # registros en bruto de una fuente concreta</pre>
+
+  <h3>Secretos</h3>
+<pre class="code">npx @insforge/cli secrets list                       # listar claves (valores ocultos)
+npx @insforge/cli secrets get &lt;CLAVE&gt;                 # ver el valor descifrado de una clave
+npx @insforge/cli secrets add &lt;CLAVE&gt; &lt;valor&gt;         # crear un secreto propio
+npx @insforge/cli secrets rotate api-key              # rotar la clave de administrador
+npx @insforge/cli secrets rotate anon-key             # rotar la clave pública</pre>
+
+  <h3>Despliegue de sitios (Sites)</h3>
+<pre class="code">npx @insforge/cli deployments deploy ./frontend       # desplegar el frontend
+npx @insforge/cli deployments env list                # listar variables de entorno del despliegue
+npx @insforge/cli deployments env set &lt;VAR&gt; &lt;valor&gt;    # definir una variable de entorno
+npx @insforge/cli deployments list                     # historial de despliegues
+npx @insforge/cli deployments status &lt;id&gt; --sync       # sincronizar y ver el estado de un despliegue
+npx @insforge/cli deployments cancel &lt;id&gt;               # cancelar un despliegue en curso</pre>
+
+  <h3>Uso y facturación</h3>
+<pre class="code">npx @insforge/cli usage                               # uso del periodo actual
+npx @insforge/cli usage --org-id &lt;id&gt;                  # uso de una organización concreta
+npx @insforge/cli usage --json                         # en formato JSON</pre>
+
+  <h3>Proyecto: mantenimiento</h3>
+<pre class="code">npx @insforge/cli projects update-version              # actualizar a la última versión del backend
+npx @insforge/cli projects delete --project &lt;id&gt;       # borrar un proyecto (irreversible)</pre>
+
+  <div class="callout co-info"><div class="ct">ℹ️ Fin del tutorial</div><p>Documento generado a partir de la documentación oficial de InsForge (<code class="inline">docs.insforge.dev</code>), su blog oficial y su repositorio en GitHub (<code class="inline">github.com/InsForge/InsForge</code>), consultados específicamente para este trabajo. Cuando la documentación oficial consultada no especificaba un punto concreto, este documento lo señala explícitamente en lugar de inventarlo.</p></div>
+</section>
+
+<!-- ==================== CRÉDITOS ==================== -->
+<section id="sec-creditos" class="page">
+  <div class="hero-svg" id="creditsCover"></div>
+  <div class="credit-card">
+    <span class="badge" style="border-color:var(--purple);color:var(--purple);background:rgba(168,85,247,.08)"><span class="dot" style="background:var(--purple);box-shadow:0 0 8px var(--purple)"></span> Créditos del tutorial</span>
+    <h3>InsForge — Guía completa de principiante a profesional</h3>
+    <div class="credit-name">Rubén Sbarsky</div>
+    <p style="color:var(--muted)">Autor y responsable del contenido educativo de este tutorial interactivo.</p>
+    <div class="credit-grid">
+      <div class="dt-chip">📅 Fecha: <b>04/09/2026</b></div>
+      <div class="dt-chip">🕐 Hora: <b>00:53:22</b></div>
+    </div>
+    <div class="callout co-info" style="text-align:left"><div class="ct">ℹ️ Indicación educativa</div><p>Este tutorial tiene fines exclusivamente educativos y de divulgación. Todo el contenido procede de la documentación oficial de InsForge (<code class="inline">docs.insforge.dev</code>), su blog oficial y su repositorio en GitHub, investigados específicamente para este trabajo.</p></div>
+    <p class="fi" style="margin-top:18px;font-style:italic;color:var(--accent);font-weight:700;font-size:17px">Fiat iustitia, ruat caelum.</p>
+  </div>
+</section>
+
+</main>
+
+<button id="toTop" aria-label="Volver arriba" title="Volver arriba">↑</button>
+
+<footer>
+  <p>📚 Tutorial solo con fines Educativos y Divulgación</p>
+  <p>👨‍💻 Créditos: Rubén Sbarsky</p>
+  <p>📅 FECHA: 04/09/2026 · Hora: 00:53:22</p>
+  <p class="fi">Fiat iustitia, ruat caelum.</p>
+</footer>
+
+<!-- ==================== SVG DE PORTADA (symbol único reutilizado en HOME y CRÉDITOS) ==================== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="coverArt" viewBox="0 0 1600 900">
+      <defs>
+        <radialGradient id="bgGrad" cx="50%" cy="42%" r="80%">
+          <stop offset="0%" stop-color="#0d1830"/>
+          <stop offset="55%" stop-color="#0a0e1a"/>
+          <stop offset="100%" stop-color="#060910"/>
+        </radialGradient>
+        <linearGradient id="titleGrad" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0%" stop-color="#ffffff"/>
+          <stop offset="55%" stop-color="#00d4ff"/>
+          <stop offset="100%" stop-color="#a855f7"/>
+        </linearGradient>
+        <linearGradient id="hubGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#0e2a45"/>
+          <stop offset="100%" stop-color="#0f172a"/>
+        </linearGradient>
+        <pattern id="gridP" width="50" height="50" patternUnits="userSpaceOnUse">
+          <path d="M50 0 L0 0 0 50" fill="none" stroke="#101d33" stroke-width="1"/>
+        </pattern>
+        <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+          <feGaussianBlur stdDeviation="6" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- fondo -->
+      <rect width="1600" height="900" fill="url(#bgGrad)"/>
+      <rect width="1600" height="900" fill="url(#gridP)" opacity="0.55"/>
+
+      <!-- título -->
+      <text x="80" y="110" font-family="'Segoe UI',system-ui,sans-serif" font-size="58" font-weight="900" fill="url(#titleGrad)" letter-spacing="4">INSFORGE</text>
+      <text x="82" y="150" font-family="'Segoe UI',system-ui,sans-serif" font-size="20" fill="#7dd3fc" letter-spacing="3">BACKEND OPEN SOURCE · AGENT-NATIVE · POSTGRES · IA</text>
+
+      <!-- ============ TERMINAL (agente escribiendo comandos) ============ -->
+      <g filter="url(#glow)">
+        <rect x="70" y="250" width="440" height="330" rx="14" fill="#0b1322" stroke="#1e3a5f" stroke-width="2"/>
+      </g>
+      <rect x="70" y="250" width="440" height="44" rx="14" fill="#0f1c33"/>
+      <rect x="70" y="272" width="440" height="22" fill="#0f1c33"/>
+      <circle cx="98" cy="272" r="7" fill="#ef4444"/>
+      <circle cx="122" cy="272" r="7" fill="#f59e0b"/>
+      <circle cx="146" cy="272" r="7" fill="#22c55e"/>
+      <text x="180" y="278" font-family="Consolas,monospace" font-size="15" fill="#64748b">terminal — coding agent</text>
+
+      <text x="94" y="335" font-family="Consolas,monospace" font-size="19" fill="#7dd3fc" opacity="0">
+        $ npx @insforge/cli link
+        <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.06;1" dur="11s" repeatCount="indefinite"/>
+      </text>
+      <text x="94" y="380" font-family="Consolas,monospace" font-size="19" fill="#7dd3fc" opacity="0">
+        $ npx @insforge/cli db migrations up
+        <animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.2;0.26;1" dur="11s" repeatCount="indefinite"/>
+      </text>
+      <text x="94" y="425" font-family="Consolas,monospace" font-size="19" fill="#7dd3fc" opacity="0">
+        $ npx @insforge/cli diagnose --json
+        <animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.38;0.44;1" dur="11s" repeatCount="indefinite"/>
+      </text>
+      <text x="94" y="470" font-family="Consolas,monospace" font-size="19" fill="#22c55e" opacity="0">
+        ✔ backend sano · 0 errores
+        <animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.56;0.62;1" dur="11s" repeatCount="indefinite"/>
+      </text>
+      <text x="94" y="515" font-family="Consolas,monospace" font-size="19" fill="#a855f7" opacity="0">
+        ✔ MCP Connected
+        <animate attributeName="opacity" values="0;0;1;1" keyTimes="0;0.7;0.76;1" dur="11s" repeatCount="indefinite"/>
+      </text>
+      <rect x="94" y="535" width="12" height="22" fill="#00d4ff">
+        <animate attributeName="opacity" values="1;0;1" dur="1s" repeatCount="indefinite"/>
+      </rect>
+      <text x="94" y="612" font-family="Consolas,monospace" font-size="14" fill="#475569">agente IA → CLI → backend</text>
+
+      <!-- ============ RUTAS DE FLUJO ============ -->
+      <!-- terminal → hub -->
+      <path d="M510,415 C620,415 640,450 705,450" fill="none" stroke="#1e3a5f" stroke-width="3" stroke-dasharray="7 7"/>
+      <!-- hub → módulos -->
+      <path d="M895,450 L1105,175" fill="none" stroke="#12233d" stroke-width="3"/>
+      <path d="M895,450 L1105,285" fill="none" stroke="#12233d" stroke-width="3"/>
+      <path d="M895,450 L1105,395" fill="none" stroke="#12233d" stroke-width="3"/>
+      <path d="M895,450 L1105,505" fill="none" stroke="#12233d" stroke-width="3"/>
+      <path d="M895,450 L1105,615" fill="none" stroke="#12233d" stroke-width="3"/>
+      <path d="M895,450 L1105,725" fill="none" stroke="#12233d" stroke-width="3"/>
+
+      <!-- paquetes de datos: ida (comandos) y vuelta (respuestas JSON) -->
+      <circle r="7" fill="#00d4ff" filter="url(#glow)">
+        <animateMotion dur="2.2s" repeatCount="indefinite" path="M510,415 C620,415 640,450 705,450"/>
+      </circle>
+      <circle r="6" fill="#22c55e" filter="url(#glow)">
+        <animateMotion dur="2.6s" begin="0.9s" repeatCount="indefinite" path="M705,450 C640,450 620,415 510,415"/>
+      </circle>
+      <circle r="6" fill="#00d4ff" filter="url(#glow)">
+        <animateMotion dur="1.8s" repeatCount="indefinite" path="M895,450 L1105,175"/>
+      </circle>
+      <circle r="6" fill="#22c55e" filter="url(#glow)">
+        <animateMotion dur="2s" begin="0.4s" repeatCount="indefinite" path="M895,450 L1105,285"/>
+      </circle>
+      <circle r="6" fill="#f59e0b" filter="url(#glow)">
+        <animateMotion dur="2.2s" begin="0.8s" repeatCount="indefinite" path="M895,450 L1105,395"/>
+      </circle>
+      <circle r="6" fill="#a855f7" filter="url(#glow)">
+        <animateMotion dur="2.4s" begin="0.2s" repeatCount="indefinite" path="M895,450 L1105,505"/>
+      </circle>
+      <circle r="6" fill="#ef4444" filter="url(#glow)">
+        <animateMotion dur="2.6s" begin="1.1s" repeatCount="indefinite" path="M895,450 L1105,615"/>
+      </circle>
+      <circle r="6" fill="#00d4ff" filter="url(#glow)">
+        <animateMotion dur="2.8s" begin="0.6s" repeatCount="indefinite" path="M895,450 L1105,725"/>
+      </circle>
+
+      <!-- ============ HUB CENTRAL INSFORGE ============ -->
+      <circle cx="800" cy="450" r="150" fill="none" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="4 14" opacity="0.7">
+        <animateTransform attributeName="transform" type="rotate" from="0 800 450" to="360 800 450" dur="22s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="800" cy="450" r="122" fill="none" stroke="#a855f7" stroke-width="1.5" stroke-dasharray="30 18" opacity="0.55">
+        <animateTransform attributeName="transform" type="rotate" from="360 800 450" to="0 800 450" dur="16s" repeatCount="indefinite"/>
+      </circle>
+      <circle cx="800" cy="450" r="100" fill="#00d4ff" opacity="0.06">
+        <animate attributeName="r" values="96;108;96" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" values="0.05;0.14;0.05" dur="3s" repeatCount="indefinite"/>
+      </circle>
+      <polygon points="800,355 882,402 882,498 800,545 718,498 718,402" fill="url(#hubGrad)" stroke="#00d4ff" stroke-width="2.5" filter="url(#glow)"/>
+      <text x="800" y="440" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="26" font-weight="900" fill="#ffffff" letter-spacing="2">INSFORGE</text>
+      <text x="800" y="468" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="13" fill="#7dd3fc" letter-spacing="2">AGENT-NATIVE</text>
+      <text x="800" y="488" text-anchor="middle" font-family="'Segoe UI',system-ui,sans-serif" font-size="13" fill="#7dd3fc" letter-spacing="2">BACKEND</text>
+
+      <!-- agente orbitando el hub -->
+      <g>
+        <animateTransform attributeName="transform" type="rotate" from="0 800 450" to="360 800 450" dur="10s" repeatCount="indefinite"/>
+        <circle cx="800" cy="300" r="15" fill="#a855f7" filter="url(#glow)"/>
+        <text x="800" y="306" text-anchor="middle" font-family="'Segoe UI',sans-serif" font-size="13" font-weight="800" fill="#ffffff">IA</text>
+      </g>
+
+      <!-- ============ MÓDULOS DEL BACKEND ============ -->
+      <g font-family="'Segoe UI',system-ui,sans-serif">
+        <!-- DATABASE -->
+        <g>
+          <rect x="1105" y="130" width="420" height="90" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="2"/>
+          <ellipse cx="1150" cy="160" rx="20" ry="8" fill="none" stroke="#00d4ff" stroke-width="2.5"/>
+          <path d="M1130,160 v30 a20,8 0 0 0 40 0 v-30" fill="none" stroke="#00d4ff" stroke-width="2.5"/>
+          <text x="1190" y="170" font-size="20" font-weight="800" fill="#ffffff">DATABASE</text>
+          <text x="1190" y="196" font-size="13" fill="#7dd3fc">PostgreSQL · migraciones · RLS</text>
+          <circle cx="1500" cy="175" r="6" fill="#00d4ff"><animate attributeName="opacity" values="1;.2;1" dur="1.6s" repeatCount="indefinite"/></circle>
+        </g>
+        <!-- AUTH -->
+        <g>
+          <rect x="1105" y="240" width="420" height="90" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="2"/>
+          <path d="M1150,265 l20,8 v16 c0,14 -10,22 -20,26 c-10,-4 -20,-12 -20,-26 v-16 z" fill="none" stroke="#22c55e" stroke-width="2.5"/>
+          <text x="1190" y="280" font-size="20" font-weight="800" fill="#ffffff">AUTHENTICATION</text>
+          <text x="1190" y="306" font-size="13" fill="#86efac">JWT · OAuth · enlace mágico</text>
+          <circle cx="1500" cy="285" r="6" fill="#22c55e"><animate attributeName="opacity" values="1;.2;1" dur="1.9s" repeatCount="indefinite"/></circle>
+        </g>
+        <!-- STORAGE -->
+        <g>
+          <rect x="1105" y="350" width="420" height="90" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="2"/>
+          <rect x="1128" y="378" width="44" height="34" rx="5" fill="none" stroke="#f59e0b" stroke-width="2.5"/>
+          <path d="M1128,390 h44" stroke="#f59e0b" stroke-width="2.5"/>
+          <text x="1190" y="390" font-size="20" font-weight="800" fill="#ffffff">STORAGE</text>
+          <text x="1190" y="416" font-size="13" fill="#fcd34d">Compatible S3 · URLs firmadas</text>
+          <circle cx="1500" cy="395" r="6" fill="#f59e0b"><animate attributeName="opacity" values="1;.2;1" dur="2.2s" repeatCount="indefinite"/></circle>
+        </g>
+        <!-- EDGE FUNCTIONS -->
+        <g>
+          <rect x="1105" y="460" width="420" height="90" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="2"/>
+          <polygon points="1155,478 1138,508 1150,508 1144,532 1164,500 1151,500 1158,478" fill="#a855f7"/>
+          <text x="1190" y="500" font-size="20" font-weight="800" fill="#ffffff">EDGE FUNCTIONS</text>
+          <text x="1190" y="526" font-size="13" fill="#d8b4fe">Deno · cron · triggers</text>
+          <circle cx="1500" cy="505" r="6" fill="#a855f7"><animate attributeName="opacity" values="1;.2;1" dur="1.7s" repeatCount="indefinite"/></circle>
+        </g>
+        <!-- MODEL GATEWAY -->
+        <g>
+          <rect x="1105" y="570" width="420" height="90" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="2"/>
+          <circle cx="1150" cy="615" r="17" fill="none" stroke="#ef4444" stroke-width="2.5"/>
+          <circle cx="1150" cy="615" r="5" fill="#ef4444"/>
+          <line x1="1150" y1="598" x2="1150" y2="590" stroke="#ef4444" stroke-width="2.5"/>
+          <line x1="1150" y1="632" x2="1150" y2="640" stroke="#ef4444" stroke-width="2.5"/>
+          <line x1="1133" y1="615" x2="1125" y2="615" stroke="#ef4444" stroke-width="2.5"/>
+          <line x1="1167" y1="615" x2="1175" y2="615" stroke="#ef4444" stroke-width="2.5"/>
+          <text x="1190" y="610" font-size="20" font-weight="800" fill="#ffffff">MODEL GATEWAY</text>
+          <text x="1190" y="636" font-size="13" fill="#fca5a5">IA · OpenRouter · embeddings</text>
+          <circle cx="1500" cy="615" r="6" fill="#ef4444"><animate attributeName="opacity" values="1;.2;1" dur="2s" repeatCount="indefinite"/></circle>
+        </g>
+        <!-- REALTIME -->
+        <g>
+          <rect x="1105" y="680" width="420" height="90" rx="12" fill="#0f172a" stroke="#1e3a5f" stroke-width="2"/>
+          <path d="M1126,725 q12,-22 24,0 q12,22 24,0" fill="none" stroke="#00d4ff" stroke-width="2.5"/>
+          <text x="1190" y="720" font-size="20" font-weight="800" fill="#ffffff">REALTIME</text>
+          <text x="1190" y="746" font-size="13" fill="#7dd3fc">WebSockets · presencia</text>
+          <circle cx="1500" cy="725" r="6" fill="#00d4ff"><animate attributeName="opacity" values="1;.2;1" dur="1.5s" repeatCount="indefinite"/></circle>
+        </g>
+      </g>
+
+      <!-- barra inferior -->
+      <rect x="0" y="852" width="1600" height="48" fill="#080c16"/>
+      <line x1="0" y1="852" x2="1600" y2="852" stroke="#1e3a5f" stroke-width="1.5"/>
+      <text x="80" y="882" font-family="Consolas,monospace" font-size="15" fill="#475569">docs.insforge.dev · github.com/InsForge/InsForge · CLI + MCP + Skills</text>
+      <text x="1520" y="882" text-anchor="end" font-family="Consolas,monospace" font-size="15" fill="#00d4ff">● LIVE
+        <animate attributeName="opacity" values="1;.3;1" dur="1.4s" repeatCount="indefinite"/>
+      </text>
+    </symbol>
+  </defs>
+</svg>
+
+<script>
+(function(){
+  'use strict';
+
+  /* ===== Definición de secciones de la SPA ===== */
+  var SECTIONS = [
+    {id:'home',        label:'INICIO',            icon:'🏠'},
+    {id:'quees',       label:'¿QUÉ ES?',          icon:'📦'},
+    {id:'agentes',     label:'AGENTES IA',        icon:'🤖'},
+    {id:'conceptos',   label:'CONCEPTOS',         icon:'📚'},
+    {id:'primeros',    label:'PRIMEROS PASOS',    icon:'🚀'},
+    {id:'proyectos',   label:'PROYECTOS',         icon:'🗂️'},
+    {id:'database',    label:'DATABASE',          icon:'🗄️'},
+    {id:'auth',        label:'AUTH',              icon:'🔐'},
+    {id:'storage',     label:'STORAGE',           icon:'📁'},
+    {id:'functions',   label:'EDGE FUNCTIONS',    icon:'⚡'},
+    {id:'ia',          label:'IA / MODELS',       icon:'🧠'},
+    {id:'realtime',    label:'REALTIME',          icon:'📡'},
+    {id:'sites',       label:'SITES',             icon:'🌐'},
+    {id:'cli',         label:'CLI',               icon:'⌨️'},
+    {id:'mcp',         label:'MCP',               icon:'🔌'},
+    {id:'skills',      label:'SKILLS',            icon:'📘'},
+    {id:'agentnative', label:'AGENT-NATIVE',      icon:'🛠️'},
+    {id:'sdks',        label:'SDKs y APIs',       icon:'🧩'},
+    {id:'vector',      label:'PGVECTOR',          icon:'🧬'},
+    {id:'cron',        label:'CRON JOBS',         icon:'⏰'},
+    {id:'compute',     label:'COMPUTE',           icon:'🐳'},
+    {id:'analytics',   label:'ANALYTICS',         icon:'📊'},
+    {id:'payments',    label:'PAYMENTS',          icon:'💳'},
+    {id:'branching',   label:'BRANCHING',         icon:'🌿'},
+    {id:'selfhost',    label:'SELF-HOSTING',      icon:'🏠'},
+    {id:'seguridad',   label:'SEGURIDAD',         icon:'🛡️'},
+    {id:'ejemplo',     label:'EJEMPLO FULL',      icon:'🧪'},
+    {id:'faq',         label:'FAQ',               icon:'❓'},
+    {id:'niveles',     label:'NIVELES',           icon:'🎓'},
+    {id:'chuleta',     label:'CHULETA',           icon:'📋'},
+    {id:'creditos',    label:'CRÉDITOS',          icon:'👨‍💻', credits:true}
+  ];
+
+  var navScroll = document.getElementById('navScroll');
+  var pages = document.querySelectorAll('.page');
+  var btnMap = {};
+
+  /* Construir navbar */
+  SECTIONS.forEach(function(s){
+    var b = document.createElement('button');
+    b.className = 'navbtn' + (s.credits ? ' credits-btn' : '');
+    b.textContent = (s.icon ? s.icon + ' ' : '') + s.label;
+    b.setAttribute('data-target', s.id);
+    b.addEventListener('click', function(){ showSection(s.id); });
+    navScroll.appendChild(b);
+    btnMap[s.id] = b;
+  });
+
+  /* Insertar el MISMO SVG de portada (symbol reutilizado) en HOME y CRÉDITOS */
+  function mountCover(containerId){
+    var host = document.getElementById(containerId);
+    if(!host) return;
+    var svg = document.createElementNS('http://www.w3.org/2000/svg','svg');
+    svg.setAttribute('viewBox','0 0 1600 900');
+    svg.setAttribute('role','img');
+    svg.setAttribute('aria-label','Portada animada: agente de IA operando el backend InsForge mediante CLI, con flujo de datos hacia Database, Auth, Storage, Edge Functions, Model Gateway y Realtime');
+    svg.style.width = '100%';
+    svg.style.height = 'auto';
+    svg.style.display = 'block';
+    var use = document.createElementNS('http://www.w3.org/2000/svg','use');
+    use.setAttribute('href','#coverArt');
+    svg.appendChild(use);
+    host.appendChild(svg);
+  }
+  mountCover('homeCover');
+  mountCover('creditsCover');
+
+  /* Reiniciar la animación del SVG al mostrar HOME o CRÉDITOS */
+  function restartCover(sectionId){
+    var hostId = (sectionId === 'home') ? 'homeCover' : (sectionId === 'creditos' ? 'creditsCover' : null);
+    if(!hostId) return;
+    var host = document.getElementById(hostId);
+    var svg = host && host.querySelector('svg');
+    if(svg && typeof svg.setCurrentTime === 'function'){
+      try { svg.setCurrentTime(0); } catch(e){}
+    }
+  }
+
+  /* ===== Lógica SPA ===== */
+  function showSection(id){
+    var found = false;
+    pages.forEach(function(p){
+      var isTarget = (p.id === 'sec-' + id);
+      p.classList.toggle('active', isTarget);
+      if(isTarget) found = true;
+    });
+    if(!found) return;
+    SECTIONS.forEach(function(s){
+      var b = btnMap[s.id];
+      if(b) b.classList.toggle('active', s.id === id);
+    });
+    var activeBtn = btnMap[id];
+    if(activeBtn && activeBtn.scrollIntoView){
+      try{ activeBtn.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'}); }catch(e){}
+    }
+    restartCover(id);
+    window.scrollTo({top:0, behavior:'auto'});
+    updateProgress();
+  }
+  window.showSection = showSection;
+
+  /* ===== Barra de progreso ===== */
+  var progressBar = document.getElementById('progressBar');
+  function updateProgress(){
+    var doc = document.documentElement;
+    var scrollTop = window.pageYOffset || doc.scrollTop;
+    var total = doc.scrollHeight - doc.clientHeight;
+    var pct = total > 0 ? (scrollTop / total) * 100 : 0;
+    progressBar.style.width = pct + '%';
+    var toTop = document.getElementById('toTop');
+    toTop.classList.toggle('show', scrollTop > 350);
+  }
+  window.addEventListener('scroll', updateProgress, {passive:true});
+  window.addEventListener('resize', updateProgress);
+
+  /* ===== Volver arriba ===== */
+  document.getElementById('toTop').addEventListener('click', function(){
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* ===== Accesibilidad: prefers-reduced-motion ===== */
+  if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    document.querySelectorAll('svg').forEach(function(s){
+      if(typeof s.pauseAnimations === 'function'){
+        try{ s.pauseAnimations(); }catch(e){}
+      }
+    });
+  }
+
+  /* Estado inicial */
+  btnMap['home'].classList.add('active');
+  updateProgress();
+})();
+</script>
+</body>
+</html>
